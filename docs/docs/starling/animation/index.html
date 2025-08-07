@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.animation - Starling API Reference</title></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><h1>starling.animation </h1>  <table class="table table-condensed"><tbody><tr><th style="width:200px;"><i class="fa fa-folder-o"></i><a href="../../index.html" title="starling">..</a></th><td></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/BezierEasing.html" title="starling.animation.BezierEasing">BezierEasing</a></td><td><p>Provides Cubic Bezier Curve easing, which generalizes easing functions
+<em>  via a four-point bezier curve. That way, you can easily create custom easing functions
+</em>  that will be picked up by Starling's Tween class later. To set up your bezier curves,
+<em>  best use a visual tool like <a href="http://cubic-bezier.com/">cubic-bezier.com</a> or
+</em>  <a href="http://matthewlein.com/ceaser/">Ceaser</a>.
+<em>
+</em>  <p>For example, you can add the transitions recommended by Google's Material Design
+<em>  standards (see <a href="https://material.io/design/motion/speed.html#easing">here</a>)
+</em>  like this:</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/DelayedCall.html" title="starling.animation.DelayedCall">DelayedCall</a></td><td><p>A DelayedCall allows you to execute a method after a certain time has passed. Since it 
+<em>  implements the IAnimatable interface, it can be added to a juggler. In most cases, you 
+</em>  do not have to use this class directly; the juggler class contains a method to delay
+<em>  calls directly. 
+</em> 
+<em>  <p>DelayedCall dispatches an Event of type 'Event.REMOVE_FROM_JUGGLER' when it is finished,
+</em>  so that the juggler automatically removes it when its no longer needed.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/IAnimatable.html" title="starling.animation.IAnimatable">IAnimatable</a></td><td><p>The IAnimatable interface describes objects that are animated depending on the passed time. 
+<em>   Any object that implements this interface can be added to a juggler.
+</em><br />
+<em>   <p>When an object should no longer be animated, it has to be removed from the juggler. 
+</em>   To do this, you can manually remove it via the method <code>juggler.remove(object)</code>,
+<em>   or the object can request to be removed by dispatching a Starling event with the type
+</em>   <code>Event.REMOVE_FROM_JUGGLER</code>. The "Tween" class is an example of a class that
+<em>   dispatches such an event; you don't have to remove tweens manually from the juggler.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/Juggler.html" title="starling.animation.Juggler">Juggler</a></td><td><p>The Juggler takes objects that implement IAnimatable (like Tweens) and executes them.
+<em> 
+</em>  <p>A juggler is a simple object. It does no more than saving a list of objects implementing 
+<em>  "IAnimatable" and advancing their time if it is told to do so (by calling its own 
+</em>  "advanceTime"-method). When an animation is completed, it throws it away.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/Transitions.html" title="starling.animation.Transitions">Transitions</a></td><td><p>The Transitions class contains static methods that define easing functions. 
+<em>  Those functions are used by the Tween class to execute animations.
+</em> 
+<em>  <p>Here is a visual representation of the available transitions:</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/animation/Tween.html" title="starling.animation.Tween">Tween</a></td><td><p>A Tween animates numeric properties of objects. It uses different transition functions
+<em>  to give the animations various styles.
+</em><br />
+<em>  <p>The primary use of this class is to do standard animations like movement, fading, 
+</em>  rotation, etc. But there are no limits on what to animate; as long as the property you want
+<em>  to animate is numeric (<code>int, uint, Number</code>), the tween can handle it. For a list 
+</em>  of available Transition types, look at the "Transitions" class.</p></td></tr></tbody></table></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

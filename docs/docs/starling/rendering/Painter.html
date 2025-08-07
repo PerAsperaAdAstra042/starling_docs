@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.rendering.Painter - Starling API Reference</title><meta name="description" content="A class that orchestrates rendering of all Starling display objects.
+&lt;em&gt;
+&lt;/em&gt;  &lt;p&gt;A Starling instance contains exactly one &#039;Painter&#039; instance that should be used for all
+&lt;em&gt;  rendering purposes. Each frame, it is passed to the render methods of all rendered display
+&lt;/em&gt;  objects. To access it outside a render method, call &lt;code&gt;Starling.painter&lt;/code&gt;."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/rendering/Painter.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> Painter</h1><h4><small>package <a href="../../starling/rendering/index.html">starling.rendering</a></small></h4>    <span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>A class that orchestrates rendering of all Starling display objects.
+<em>
+</em>  <p>A Starling instance contains exactly one 'Painter' instance that should be used for all
+<em>  rendering purposes. Each frame, it is passed to the render methods of all rendered display
+</em>  objects. To access it outside a render method, call <code>Starling.painter</code>.</p>
+<em>
+</em>  <p>The painter is responsible for drawing all display objects to the screen. At its
+<em>  core, it is a wrapper for many Context3D methods, but that's not all: it also provides
+</em>  a convenient state mechanism, supports masking and acts as __iddleman between display
+<em>  objects and renderers.</p>
+</em>
+<em>  <strong>The State Stack</strong>
+</em>
+<em>  <p>The most important concept of the Painter class is the state stack. A RenderState
+</em>  stores a combination of settings that are currently used for rendering, e.g. the current
+<em>  projection- and modelview-matrices and context-related settings. It can be accessed
+</em>  and manipulated via the <code>state</code> property. Use the methods
+<em>  <code>pushState</code> and <code>popState</code> to store a specific state and restore
+</em>  it later. That makes it easy to write rendering code that doesn't have any side effects.</p>
+<em>
+</em>  <listing>
+<em>  painter.pushState(); // save a copy of the current state on the stack
+</em>  painter.state.renderTarget = renderTexture;
+<em>  painter.state.transformModelviewMatrix(object.transformationMatrix);
+</em>  painter.state.alpha = 0.5;
+<em>  painter.prepareToDraw(); // apply all state settings at the render context
+</em>  drawSomething(); // insert Stage3D rendering code here
+<em>  painter.popState(); // restores previous state</listing>
+</em>
+*  @see RenderState</p></div><h3 class="section">Static variables</h3><div class="fields"><div class="field "><a name="DEFAULT_STENCIL_VALUE"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value(127)</span><span class="label label-static">static</span><a href="#DEFAULT_STENCIL_VALUE"><span class="identifier">DEFAULT_STENCIL_VALUE</span></a>:<span class="type">UInt</span><span> = 127</span></code></h3><div class="doc"><p>The value with which the stencil buffer will be cleared,</p>
+<pre><code>    *  and the default reference value used for stencil tests.
+</code></pre></div></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ sharedContext : null })</span><a href="#new"><span class="identifier">new</span></a>(<span style="white-space:nowrap">stage3D:<span class="type">Stage3D</span>,</span> <span style="white-space:nowrap">?sharedContext:<span class="type">Bool</span></span>)</code></h3><div class="doc"><p>Creates a new Painter object. Normally, it's not necessary to create any custom</p>
+<pre><code> *  painters; instead, use the global painter found on the Starling instance.
+</code></pre></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="backBufferHeight"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#backBufferHeight"><span class="identifier">backBufferHeight</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>Returns the current height of the back buffer. In most cases, this value is in pixels;</p>
+<pre><code> *  however, if the app is running on an HiDPI display with an activated
+ *  'supportHighResolutions' setting, you have to multiply with 'backBufferScaleFactor'
+ *  for the actual pixel count. Alternatively, use the Context3D-property with the
+ *  same name: it will return the exact pixel values.
+</code></pre></div></div><div class="field "><a name="backBufferScaleFactor"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#backBufferScaleFactor"><span class="identifier">backBufferScaleFactor</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The number of pixels per point returned by the 'backBufferWidth/Height' properties.</p>
+<pre><code> *  Except for desktop HiDPI displays with an activated 'supportHighResolutions' setting,
+ *  this will always return '1'.
+</code></pre></div></div><div class="field "><a name="backBufferWidth"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#backBufferWidth"><span class="identifier">backBufferWidth</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>Returns the current width of the back buffer. In most cases, this value is in pixels;</p>
+<pre><code> *  however, if the app is running on an HiDPI display with an activated
+ *  'supportHighResolutions' setting, you have to multiply with 'backBufferScaleFactor'
+ *  for the actual pixel count. Alternatively, use the Context3D-property with the
+ *  same name: it will return the exact pixel values.
+</code></pre></div></div><div class="field "><a name="cacheEnabled"></a><h3 class="anchor"><code><a href="#cacheEnabled"><span class="identifier">cacheEnabled</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the render cache is enabled. Normally, this should be left at the default;</p>
+<pre><code> *  however, some custom rendering logic might require to change this property temporarily.
+ *  Also note that the cache is automatically reactivated each frame, right before the
+ *  render process.
+ *
+ *  @default true
+</code></pre></div></div><div class="field "><a name="context"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#context"><span class="identifier">context</span></a>:<span class="type">Context3D</span></code></h3><div class="doc"><p>The Context3D instance this painter renders into.</p></div></div><div class="field "><a name="contextValid"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#contextValid"><span class="identifier">contextValid</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the Context3D object is currently valid (i.e. it hasn't been lost or</p>
+<pre><code> *  disposed).
+</code></pre></div></div><div class="field "><a name="drawCount"></a><h3 class="anchor"><code><a href="#drawCount"><span class="identifier">drawCount</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>Indicates the number of stage3D draw calls.</p></div></div><div class="field "><a name="enableErrorChecking"></a><h3 class="anchor"><code><a href="#enableErrorChecking"><span class="identifier">enableErrorChecking</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if Stage3D render methods will report errors. Activate only when needed,</p>
+<pre><code> *  as this has a negative impact on performance. @default false
+</code></pre></div></div><div class="field "><a name="frameID"></a><h3 class="anchor"><code><a href="#frameID"><span class="identifier">frameID</span></a>:<span class="type">UInt</span></code></h3><div class="doc"><p>Returns the index of the current frame <strong>if</strong> the render cache is enabled;</p>
+<pre><code> *  otherwise, returns zero. To get the frameID regardless of the render cache, call
+ *  &lt;code&gt;Starling.frameID&lt;/code&gt; instead.
+</code></pre></div></div><div class="field "><a name="pixelSize"></a><h3 class="anchor"><code><a href="#pixelSize"><span class="identifier">pixelSize</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The size (in points) that represents one pixel in the back buffer.</p></div></div><div class="field "><a name="profile"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#profile"><span class="identifier">profile</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>The Context3D profile of the current render context, or <code>null</code></p>
+<pre><code> *  if the context has not been created yet.
+</code></pre></div></div><div class="field "><a name="shareContext"></a><h3 class="anchor"><code><a href="#shareContext"><span class="identifier">shareContext</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if another Starling instance (or another Stage3D framework altogether)</p>
+<pre><code> *  uses the same render context. @default false
+</code></pre></div></div><div class="field "><a name="sharedData"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#sharedData"><span class="identifier">sharedData</span></a>:<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Dynamic</span>&gt;</code></h3><div class="doc"><p>A dictionary that can be used to save custom data related to the render context.</p>
+<pre><code> *  If you need to share data that is bound to the render context (e.g. textures), use
+ *  this dictionary instead of creating a static class variable. That way, the data will
+ *  be available for all Starling instances that use this stage3D / context.
+</code></pre></div></div><div class="field "><a name="stage3D"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#stage3D"><span class="identifier">stage3D</span></a>:<span class="type">Stage3D</span></code></h3><div class="doc"><p>The Stage3D instance this painter renders into.</p></div></div><div class="field "><a name="state"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#state"><span class="identifier">state</span></a>:<a class="type" title="starling.rendering.RenderState - The RenderState stores a combination of settings that are currently used for rendering." href="../../starling/rendering/RenderState.html">RenderState</a></code></h3><div class="doc"><p>The current render state, containing some of the context settings, projection- and</p>
+<pre><code> *  modelview-matrix, etc. Always returns the same instance, even after calls to "pushState"
+ *  and "popState".
+ *
+ *  &lt;p&gt;When you change the current RenderState, and this change is not compatible with
+ *  the current render batch, the batch will be concluded right away. Thus, watch out
+ *  for changes of blend mode, clipping rectangle, render target or culling.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="stencilReferenceValue"></a><h3 class="anchor"><code><a href="#stencilReferenceValue"><span class="identifier">stencilReferenceValue</span></a>:<span class="type">UInt</span></code></h3><div class="doc"><p>The current stencil reference value of the active render target. This value</p>
+<pre><code> *  is typically incremented when drawing a mask and decrementing when erasing it.
+ *  The painter keeps track of one stencil reference value per render target.
+ *  Only change this value if you know what you're doing!
+</code></pre></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="batchMesh"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ subset : null })</span><a href="#batchMesh"><span class="identifier">batchMesh</span></a>(<span style="white-space:nowrap">mesh:<a class="type" title="starling.display.Mesh - The base class for all tangible (non-container) display objects, spawned up by a number   of triangles." href="../../starling/display/Mesh.html">Mesh</a>,</span> <span style="white-space:nowrap">?subset:<a class="type" title="starling.utils.MeshSubset - A class describing a range of vertices and indices, thus referencing a subset of a Mesh." href="../../starling/utils/MeshSubset.html">MeshSubset</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Adds a mesh to the current batch of unrendered meshes. If the current batch is not</p>
+<pre><code> *  compatible with the mesh, all previous meshes are rendered at once and the batch
+ *  is cleared.
+ *
+ *  @param mesh    The mesh to batch.
+ *  @param subset  The range of vertices to be batched. If &lt;code&gt;null&lt;/code&gt;, the complete
+ *                 mesh will be used.
+</code></pre></div></div><div class="field "><a name="clear"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ alpha : 0.0, rgb : 0 })</span><a href="#clear"><span class="identifier">clear</span></a>(<span style="white-space:nowrap">rgb:<span class="type">UInt</span> = 0,</span> <span style="white-space:nowrap">alpha:<span class="type">Float</span> = 0.0</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Clears the render context with a certain color and alpha value. Since this also</p>
+<pre><code> *  clears the stencil buffer, the stencil reference value is also reset to '0'.
+</code></pre></div></div><div class="field "><a name="configureBackBuffer"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ supportBrowserZoom : false })</span><a href="#configureBackBuffer"><span class="identifier">configureBackBuffer</span></a>(<span style="white-space:nowrap">viewPort:<span class="type">Rectangle</span>,</span> <span style="white-space:nowrap">contentScaleFactor:<span class="type">Float</span>,</span> <span style="white-space:nowrap">antiAlias:<span class="type">Int</span>,</span> <span style="white-space:nowrap">enableDepthAndStencil:<span class="type">Bool</span>,</span> <span style="white-space:nowrap">supportBrowserZoom:<span class="type">Bool</span> = false</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets the viewport dimensions and other attributes of the rendering buffer.
+Starling will call this method internally, so most apps won't need to mess with this.</p>
+<p><p>Beware: if <code>shareContext</code> is enabled, the method will only update the
+painter's context-related information (like the size of the back buffer), but won't
+make any actual changes to the context.</p></p><p class="javadoc">Parameters:</p><table class="table table-bordered params"><tr><th style="width:25%;"><code>viewPort</code></th><td><p>the position and size of the area that should be rendered
+into, in pixels.</p></td></tr><tr><th style="width:25%;"><code>contentScaleFactor</code></th><td><p>only relevant for Desktop (!) HiDPI screens. If you want
+to support high resolutions, pass the 'contentScaleFactor'
+of the Flash stage; otherwise, '1.0'.</p></td></tr><tr><th style="width:25%;"><code>antiAlias</code></th><td><p>from 0 (none) to 16 (very high quality).</p></td></tr><tr><th style="width:25%;"><code>enableDepthAndStencil</code></th><td><p>indicates whether the depth and stencil buffers should
+be enabled. Note that on AIR, you also have to enable
+this setting in the app-xml (application descriptor);
+otherwise, this setting will be silently ignored.</p></td></tr><tr><th style="width:25%;"><code>supportBrowserZoom</code></th><td><p>if enabled, zooming a website will adapt the size of
+the back buffer.</p></td></tr></table></div></div><div class="field "><a name="deleteProgram"></a><h3 class="anchor"><code><a href="#deleteProgram"><span class="identifier">deleteProgram</span></a>(<span style="white-space:nowrap">name:<span class="type">String</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Deletes the program of a certain name.</p></div></div><div class="field "><a name="dispose"></a><h3 class="anchor"><code><a href="#dispose"><span class="identifier">dispose</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Disposes all mesh batches, programs, and - if it is not being shared -</p>
+<pre><code> *  the render context.
+</code></pre></div></div><div class="field "><a name="drawFromCache"></a><h3 class="anchor"><code><a href="#drawFromCache"><span class="identifier">drawFromCache</span></a>(<span style="white-space:nowrap">startToken:<a class="type" title="starling.rendering.BatchToken - Points to a location within a list of MeshBatches." href="../../starling/rendering/BatchToken.html">BatchToken</a>,</span> <span style="white-space:nowrap">endToken:<a class="type" title="starling.rendering.BatchToken - Points to a location within a list of MeshBatches." href="../../starling/rendering/BatchToken.html">BatchToken</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Draws all meshes from the render cache between <code>startToken</code> and</p>
+<pre><code> *  (but not including) &lt;code&gt;endToken&lt;/code&gt;. The render cache contains all meshes
+ *  rendered in the previous frame.
+</code></pre></div></div><div class="field "><a name="drawMask"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ maskee : null })</span><a href="#drawMask"><span class="identifier">drawMask</span></a>(<span style="white-space:nowrap">mask:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a>,</span> <span style="white-space:nowrap">?maskee:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Draws a display object into the stencil buffer, incrementing the buffer on each</p>
+<pre><code> *  used pixel. The stencil reference value is incremented as well; thus, any subsequent
+ *  stencil tests outside of this area will fail.
+ *
+ *  &lt;p&gt;If 'mask' is part of the display list, it will be drawn at its conventional stage
+ *  coordinates. Otherwise, it will be drawn with the current modelview matrix.&lt;/p&gt;
+ *
+ *  &lt;p&gt;As an optimization, this method might update the clipping rectangle of the render
+ *  state instead of utilizing the stencil buffer. This is possible when the mask object
+ *  is of type &lt;code&gt;starling.display.Quad&lt;/code&gt; and is aligned parallel to the stage
+ *  axes.&lt;/p&gt;
+ *
+ *  &lt;p&gt;Note that masking breaks the render cache; the masked object must be redrawn anew
+ *  in the next frame. If you pass &lt;code&gt;maskee&lt;/code&gt;, the method will automatically
+ *  call &lt;code&gt;excludeFromCache(maskee)&lt;/code&gt; for you.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="enableBatchTrimming"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ interval : 250, enabled : true })</span><a href="#enableBatchTrimming"><span class="identifier">enableBatchTrimming</span></a>(<span style="white-space:nowrap">enabled:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">interval:<span class="type">Int</span> = 250</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Indicate how often the internally used batches are being trimmed to save memory.</p>
+<pre><code> *
+ *  &lt;p&gt;While rendering, the internally used MeshBatches are used in a different way in each
+ *  frame. To save memory, they should be trimmed every once in a while. This method defines
+ *  how often that happens, if at all. (Default: enabled = true, interval = 250)&lt;/p&gt;
+ *
+ *  @param enabled   If trimming happens at all. Only disable temporarily!
+ *  @param interval  The number of frames between each trim operation.
+</code></pre></div></div><div class="field "><a name="eraseMask"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ maskee : null })</span><a href="#eraseMask"><span class="identifier">eraseMask</span></a>(<span style="white-space:nowrap">mask:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a>,</span> <span style="white-space:nowrap">?maskee:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Draws a display object into the stencil buffer, decrementing the</p>
+<pre><code> *  buffer on each used pixel. This effectively erases the object from the stencil buffer,
+ *  restoring the previous state. The stencil reference value will be decremented.
+ *
+ *  &lt;p&gt;Note: if the mask object meets the requirements of using the clipping rectangle,
+ *  it will be assumed that this erase operation undoes the clipping rectangle change
+ *  caused by the corresponding &lt;code&gt;drawMask()&lt;/code&gt; call.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="excludeFromCache"></a><h3 class="anchor"><code><a href="#excludeFromCache"><span class="identifier">excludeFromCache</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Prevents the object from being drawn from the render cache in the next frame.</p>
+<pre><code> *  Different to &lt;code&gt;setRequiresRedraw()&lt;/code&gt;, this does not indicate that the object
+ *  has changed in any way, but just that it doesn't support being drawn from cache.
+ *
+ *  &lt;p&gt;Note that when a container is excluded from the render cache, its children will
+ *  still be cached! This just means that batching is interrupted at this object when
+ *  the display tree is traversed.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="fillToken"></a><h3 class="anchor"><code><a href="#fillToken"><span class="identifier">fillToken</span></a>(<span style="white-space:nowrap">token:<a class="type" title="starling.rendering.BatchToken - Points to a location within a list of MeshBatches." href="../../starling/rendering/BatchToken.html">BatchToken</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Updates all properties of the given token so that it describes the current position</p>
+<pre><code> *  within the render cache.
+</code></pre></div></div><div class="field "><a name="finishFrame"></a><h3 class="anchor"><code><a href="#finishFrame"><span class="identifier">finishFrame</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Completes all unfinished batches, cleanup procedures.</p></div></div><div class="field "><a name="finishMeshBatch"></a><h3 class="anchor"><code><a href="#finishMeshBatch"><span class="identifier">finishMeshBatch</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Finishes the current mesh batch and prepares the next one.</p></div></div><div class="field "><a name="getProgram"></a><h3 class="anchor"><code><a href="#getProgram"><span class="identifier">getProgram</span></a>(<span style="white-space:nowrap">name:<span class="type">String</span></span>):<a class="type" title="starling.rendering.Program - A Program represents a pair of a fragment- and vertex-shader." href="../../starling/rendering/Program.html">Program</a></code></h3><div class="doc"><p>Returns the program registered under a certain name, or null if no program with</p>
+<pre><code> *  this name has been registered.
+</code></pre></div></div><div class="field "><a name="hasProgram"></a><h3 class="anchor"><code><a href="#hasProgram"><span class="identifier">hasProgram</span></a>(<span style="white-space:nowrap">name:<span class="type">String</span></span>):<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if a program is registered under a certain name.</p></div></div><div class="field "><a name="nextFrame"></a><h3 class="anchor"><code><a href="#nextFrame"><span class="identifier">nextFrame</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Resets the current state, state stack, batch processor, stencil reference value,</p>
+<pre><code> *  clipping rectangle, and draw count. Furthermore, depth testing is disabled.
+</code></pre></div></div><div class="field "><a name="popState"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ token : null })</span><a href="#popState"><span class="identifier">popState</span></a>(<span style="white-space:nowrap">?token:<a class="type" title="starling.rendering.BatchToken - Points to a location within a list of MeshBatches." href="../../starling/rendering/BatchToken.html">BatchToken</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Restores the render state that was last pushed to the stack. If this changes</p>
+<pre><code> *  blend mode, clipping rectangle, render target or culling, the current batch
+ *  will be drawn right away.
+ *
+ *  &lt;p&gt;If you pass a BatchToken, it will be updated to point to the current location within
+ *  the render cache. That way, you can later reference this location to render a subset of
+ *  the cache.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="prepareToDraw"></a><h3 class="anchor"><code><a href="#prepareToDraw"><span class="identifier">prepareToDraw</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Applies all relevant state settings to at the render context. This includes</p>
+<pre><code> *  blend mode, render target and clipping rectangle. Always call this method before
+ *  &lt;code&gt;context.drawTriangles()&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="present"></a><h3 class="anchor"><code><a href="#present"><span class="identifier">present</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Resets the render target to the back buffer and displays its contents.</p></div></div><div class="field "><a name="pushState"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ token : null })</span><a href="#pushState"><span class="identifier">pushState</span></a>(<span style="white-space:nowrap">?token:<a class="type" title="starling.rendering.BatchToken - Points to a location within a list of MeshBatches." href="../../starling/rendering/BatchToken.html">BatchToken</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Pushes the current render state to a stack from which it can be restored later.</p>
+<pre><code> *
+ *  &lt;p&gt;If you pass a BatchToken, it will be updated to point to the current location within
+ *  the render cache. That way, you can later reference this location to render a subset of
+ *  the cache.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="refreshBackBufferSize"></a><h3 class="anchor"><code><a href="#refreshBackBufferSize"><span class="identifier">refreshBackBufferSize</span></a>(<span style="white-space:nowrap">scaleFactor:<span class="type">Float</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Refreshes the values of "backBufferWidth" and "backBufferHeight" from the current</p>
+<pre><code> *  context dimensions and stores the given "backBufferScaleFactor". This method is
+ *  called by Starling when the browser zoom factor changes (in case "supportBrowserZoom"
+ *  is enabled).
+</code></pre></div></div><div class="field "><a name="registerProgram"></a><h3 class="anchor"><code><a href="#registerProgram"><span class="identifier">registerProgram</span></a>(<span style="white-space:nowrap">name:<span class="type">String</span>,</span> <span style="white-space:nowrap">program:<a class="type" title="starling.rendering.Program - A Program represents a pair of a fragment- and vertex-shader." href="../../starling/rendering/Program.html">Program</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Registers a program under a certain name.</p>
+<pre><code> *  If the name was already used, the previous program is overwritten.
+</code></pre></div></div><div class="field "><a name="requestContext3D"></a><h3 class="anchor"><code><a href="#requestContext3D"><span class="identifier">requestContext3D</span></a>(<span style="white-space:nowrap">renderMode:<span class="type">Context3DRenderMode</span>,</span> <span style="white-space:nowrap">profile:<span class="type">Dynamic</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Requests a context3D object from the stage3D object.</p>
+<pre><code> *  This is called by Starling internally during the initialization process.
+ *  You normally don't need to call this method yourself. (For a detailed description
+ *  of the parameters, look at the documentation of the method with the same name in the
+ *  "RenderUtil" class.)
+ *
+ *  @see starling.utils.RenderUtil
+</code></pre></div></div><div class="field "><a name="restoreState"></a><h3 class="anchor"><code><a href="#restoreState"><span class="identifier">restoreState</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Restores the render state that was last pushed to the stack, but does NOT remove</p>
+<pre><code> *  it from the stack.
+</code></pre></div></div><div class="field "><a name="setStateTo"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ blendMode : &quot;auto&quot;, alphaFactor : 1.0 })</span><a href="#setStateTo"><span class="identifier">setStateTo</span></a>(<span style="white-space:nowrap">transformationMatrix:<span class="type">Matrix</span>,</span> <span style="white-space:nowrap">alphaFactor:<span class="type">Float</span> = 1.0,</span> <span style="white-space:nowrap">blendMode:<span class="type">String</span> = &quot;auto&quot;</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Modifies the current state with a transformation matrix, alpha factor, and blend mode.</p>
+<pre><code> *
+ *  @param transformationMatrix Used to transform the current &lt;code&gt;modelviewMatrix&lt;/code&gt;.
+ *  @param alphaFactor          Multiplied with the current alpha value.
+ *  @param blendMode            Replaces the current blend mode; except for "auto", which
+ *                              means the current value remains unchanged.
+</code></pre></div></div><div class="field "><a name="setupContextDefaults"></a><h3 class="anchor"><code><a href="#setupContextDefaults"><span class="identifier">setupContextDefaults</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Makes sure that the default context settings Starling relies on will be refreshed</p>
+<pre><code>    *  before the next 'draw' operation. This includes blend mode, culling, and depth test.
+</code></pre></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

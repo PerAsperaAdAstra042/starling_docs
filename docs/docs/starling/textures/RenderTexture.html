@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.textures.RenderTexture - Starling API Reference</title><meta name="description" content="A RenderTexture is a dynamic texture onto which you can draw any display object.
+&lt;em&gt; 
+&lt;/em&gt;  &lt;p&gt;After creating a render texture, just call the &lt;code&gt;draw&lt;/code&gt; method to render 
+&lt;em&gt;  an object directly onto the texture. The object will be drawn onto the texture at its current
+&lt;/em&gt;  position, adhering its current rotation, scale and alpha properties."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/textures/RenderTexture.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> RenderTexture</h1><h4><small>package <a href="../../starling/textures/index.html">starling.textures</a></small></h4><h4><small>extends <a class="type" title="starling.textures.SubTexture - A SubTexture represents a section of another texture." href="../../starling/textures/SubTexture.html">SubTexture</a> &rsaquo; <a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></small></h4>    <hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>A RenderTexture is a dynamic texture onto which you can draw any display object.
+<em> 
+</em>  <p>After creating a render texture, just call the <code>draw</code> method to render 
+<em>  an object directly onto the texture. The object will be drawn onto the texture at its current
+</em>  position, adhering its current rotation, scale and alpha properties.</p> 
+<em><br />
+</em>  <p>Drawing is done very efficiently, as it is happening directly in graphics memory. After 
+<em>  you have drawn objects onto the texture, the performance will be just like that of a normal 
+</em>  texture — no matter how many objects you have drawn.</p>
+<em><br />
+</em>  <p>If you draw lots of objects at once, it is recommended to bundle the drawing calls in 
+<em>  a block via the <code>drawBundled</code> method, like shown below. That will speed it up 
+</em>  immensely, allowing you to draw hundreds of objects very quickly.</p>
+<em><br />
+</em>     <pre>
+<em>  renderTexture.drawBundled(function():void
+</em>  {
+<em>     for (var i:int=0; i&lt;numDrawings; ++i)
+</em>     {
+<em>         image.rotation = (2 &#42; Math.PI / numDrawings) &#42; i;
+</em>         renderTexture.draw(image);
+<em>     }<br />
+</em>  });
+<em>  </pre>
+</em><br />
+<em>  <p>To erase parts of a render texture, you can use any display object like a "rubber" by
+</em>  setting its blending mode to <code>BlendMode.ERASE</code>. To wipe it completely clean,
+<em>  use the <code>clear</code> method.</p>
+</em> 
+<em>  <strong>Persistence</strong>
+</em>
+<em>  <p>Older devices may require double buffering to support persistent render textures. Thus,
+</em>  you should disable the <code>persistent</code> parameter in the constructor if you only
+<em>  need to make one draw operation on the texture. The static <code>useDoubleBuffering</code>
+</em>  property allows you to customize if new textures will be created with or without double
+<em>  buffering.</p>
+</em>
+<em>  <strong>Context Loss</strong>
+</em>
+<em>  <p>Unfortunately, render textures are wiped clean when the render context is lost.
+</em>  This means that you need to manually recreate all their contents in such a case.
+<em>  One way to do that is by using the <code>root.onRestore</code> callback, like here:</p>
+</em>
+<em>  <listing>
+</em>  renderTexture.root.onRestore = function():void
+<em>  {
+</em>      var quad:Quad = new Quad(100, 100, 0xff00ff);
+<em>      renderTexture.clear(); // required on texture restoration
+</em>      renderTexture.draw(quad);
+<em>  });</listing>
+</em>
+<em>  <p>For example, a drawing app would need to store information about all draw operations
+</em>  when they occur, and then recreate them inside <code>onRestore</code> on a context loss
+<em>  (preferably using <code>drawBundled</code> instead).</p>
+</em>
+<em>  <p>However, there is one problem: when that callback is executed, it's very likely that
+</em>  not all of your textures are already available, since they need to be restored, too (and
+<em>  that might take a while). You probably loaded your textures with the "AssetManager".
+</em>  In that case, you can listen to its <code>TEXTURES_RESTORED</code> event instead:</p>
+<em>
+</em>  <listing>
+<em>  assetManager.addEventListener(Event.TEXTURES_RESTORED, function():void
+</em>  {
+<em>      var brush:Image = new Image(assetManager.getTexture("brush"));
+</em>      renderTexture.draw(brush);
+<em>  });</listing>
+</em>
+<em>  <p>[Note that this time, there is no need to call <code>clear</code>, because that's the
+</em>  default behavior of <code>onRestore</code>, anyway — and we didn't modify that.]</p></p></div><h3 class="section">Static variables</h3><div class="fields"><div class="field "><a name="useDoubleBuffering"></a><h3 class="anchor"><code><span class="label label-static">static</span><a href="#useDoubleBuffering"><span class="identifier">useDoubleBuffering</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if new persistent textures should use double buffering. Single buffering</p>
+<pre><code> *  is faster and requires less memory, but is not supported on all hardware.
+ *
+ *  &lt;p&gt;By default, applications running with the profile "baseline" or "baselineConstrained"
+ *  will use double buffering; all others use just a single buffer. You can override this
+ *  behavior, though, by assigning a different value at runtime.&lt;/p&gt;
+ *
+ *  @default true for "baseline" and "baselineConstrained", false otherwise
+</code></pre></div></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ forcePotTexture : false, format : &quot;bgra&quot;, scale : -1, persistent : true })</span><a href="#new"><span class="identifier">new</span></a>(<span style="white-space:nowrap">width:<span class="type">Int</span>,</span> <span style="white-space:nowrap">height:<span class="type">Int</span>,</span> <span style="white-space:nowrap">persistent:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = -1,</span> <span style="white-space:nowrap">format:<span class="type">String</span> = &quot;bgra&quot;,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false</span>)</code></h3><div class="doc"><p>Creates a new RenderTexture with a certain size (in points). If the texture is</p>
+<pre><code> *  persistent, its contents remains intact after each draw call, allowing you to use the
+ *  texture just like a canvas. If it is not, it will be cleared before each draw call.
+ *
+ *  &lt;p&gt;Non-persistent textures can be used more efficiently on older devices; on modern
+ *  hardware, it does not make a difference. For more information, have a look at the
+ *  documentation of the &lt;code&gt;useDoubleBuffering&lt;/code&gt; property.&lt;/p&gt;
+</code></pre></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="isPersistent"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#isPersistent"><span class="identifier">isPersistent</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the texture is persistent over multiple draw calls.</p></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="clear"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ alpha : 0.0, color : 0 })</span><a href="#clear"><span class="identifier">clear</span></a>(<span style="white-space:nowrap">color:<span class="type">UInt</span> = 0,</span> <span style="white-space:nowrap">alpha:<span class="type">Float</span> = 0.0</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Clears the render texture with a certain color and alpha value. Call without any</p>
+<pre><code> *  arguments to restore full transparency.
+</code></pre></div></div><div class="field "><a name="dispose"></a><h3 class="anchor"><code><a href="#dispose"><span class="identifier">dispose</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>@inheritDoc</p></div></div><div class="field "><a name="draw"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ cameraPos : null, antiAliasing : 0, alpha : 1.0, matrix : null })</span><a href="#draw"><span class="identifier">draw</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.display.DisplayObject - Dispatched when an object is added to a parent." href="../../starling/display/DisplayObject.html">DisplayObject</a>,</span> <span style="white-space:nowrap">?matrix:<span class="type">Matrix</span>,</span> <span style="white-space:nowrap">alpha:<span class="type">Float</span> = 1.0,</span> <span style="white-space:nowrap">antiAliasing:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">?cameraPos:<span class="type">Vector3D</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Draws an object into the texture.</p>
+<pre><code> * 
+ *  @param object       The object to draw.
+ *  @param matrix       If 'matrix' is null, the object will be drawn adhering its 
+ *                      properties for position, scale, and rotation. If it is not null,
+ *                      the object will be drawn in the orientation depicted by the matrix.
+ *  @param alpha        The object's alpha value will be multiplied with this value.
+ *  @param antiAliasing Values range from 0 (no antialiasing) to 4 (best quality).
+ *                      Beginning with AIR 22, this feature is supported on all platforms
+ *                      (except for software rendering mode).
+ *  @param cameraPos    When drawing a 3D object, you can optionally pass in a custom
+ *                      camera position. If left empty, the camera will be placed with
+ *                      its default settings (centered over the texture, fov = 1.0).
+</code></pre></div></div><div class="field "><a name="drawBundled"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ cameraPos : null, antiAliasing : 0 })</span><a href="#drawBundled"><span class="identifier">drawBundled</span></a>(<span style="white-space:nowrap">drawingBlock:()&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span>,</span> <span style="white-space:nowrap">antiAliasing:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">?cameraPos:<span class="type">Vector3D</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Bundles several calls to <code>draw</code> together in a block. This avoids buffer </p>
+<pre><code> *  switches and allows you to draw multiple objects into a non-persistent texture.
+ *  Note that the 'antiAliasing' setting provided here overrides those provided in
+ *  individual 'draw' calls.
+ *  
+ *  @param drawingBlock  a callback with the form: &lt;pre&gt;function():void;&lt;/pre&gt;
+ *  @param antiAliasing  Values range from 0 (no antialiasing) to 4 (best quality).
+ *                       Beginning with AIR 22, this feature is supported on all platforms
+ *                       (except for software rendering mode).
+ *  @param cameraPos     When drawing a 3D object, you can optionally pass in a custom
+ *                       camera position. If left empty, the camera will be placed with
+ *                       its default settings (centered over the texture, fov = 1.0).
+</code></pre></div></div></div>  <div class="inherited-fields well"><h3 class="section">Inherited Variables</h3><div class="fields"><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="starling.textures.SubTexture - A SubTexture represents a section of another texture." href="../../starling/textures/SubTexture.html">SubTexture</a></h4><div style="display:none"><div class="field "><a name="ownsParent"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#ownsParent"><span class="identifier">ownsParent</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the parent texture is disposed when this object is disposed.</p></div></div><div class="field "><a name="parent"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#parent"><span class="identifier">parent</span></a>:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>The texture which the SubTexture is based on.</p></div></div><div class="field "><a name="region"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#region"><span class="identifier">region</span></a>:<span class="type">Rectangle</span></code></h3><div class="doc"><p>The region of the parent texture that the SubTexture is showing (in points).</p>
+<pre><code> *
+ *  &lt;p&gt;CAUTION: not a copy, but the actual object! Do not modify!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="rotated"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#rotated"><span class="identifier">rotated</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>If true, the SubTexture will show the parent region rotated by 90 degrees (CCW).</p></div></div></div><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></h4><div style="display:none"><div class="field "><a name="base"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#base"><span class="identifier">base</span></a>:<span class="type">TextureBase</span></code></h3><div class="doc"><p>The Stage3D texture object the texture is based on.</p></div></div><div class="field "><a name="format"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#format"><span class="identifier">format</span></a>:<span class="type">Context3DTextureFormat</span></code></h3><div class="doc"><p>The <code>Context3DTextureFormat</code> of the underlying texture data.</p></div></div><div class="field "><a name="frame"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frame"><span class="identifier">frame</span></a>:<span class="type">Rectangle</span></code></h3><div class="doc"><p>The texture frame if it has one (see class description), otherwise <code>null</code>.</p>
+<pre><code> *  &lt;p&gt;CAUTION: not a copy, but the actual object! Do not modify!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="frameHeight"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frameHeight"><span class="identifier">frameHeight</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in points, taking into account the frame rectangle</p>
+<pre><code> *  (if there is one).
+</code></pre></div></div><div class="field "><a name="frameWidth"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frameWidth"><span class="identifier">frameWidth</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in points, taking into account the frame rectangle</p>
+<pre><code> *  (if there is one).
+</code></pre></div></div><div class="field "><a name="height"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#height"><span class="identifier">height</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in points.</p></div></div><div class="field "><a name="mipMapping"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#mipMapping"><span class="identifier">mipMapping</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the texture contains mip maps.</p></div></div><div class="field "><a name="nativeHeight"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#nativeHeight"><span class="identifier">nativeHeight</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in pixels (without scale adjustment).</p></div></div><div class="field "><a name="nativeWidth"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#nativeWidth"><span class="identifier">nativeWidth</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in pixels (without scale adjustment).</p></div></div><div class="field "><a name="premultipliedAlpha"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#premultipliedAlpha"><span class="identifier">premultipliedAlpha</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the alpha values are premultiplied into the RGB values.</p></div></div><div class="field "><a name="root"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#root"><span class="identifier">root</span></a>:<a class="type" title="starling.textures.ConcreteTexture - A ConcreteTexture wraps a Stage3D texture object, storing the properties of the texture   and providing utility methods for data upload, etc." href="../../starling/textures/ConcreteTexture.html">ConcreteTexture</a></code></h3><div class="doc"><p>The concrete texture the texture is based on.</p></div></div><div class="field "><a name="scale"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#scale"><span class="identifier">scale</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The scale factor, which influences width and height properties.</p></div></div><div class="field "><a name="transformationMatrix"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#transformationMatrix"><span class="identifier">transformationMatrix</span></a>:<span class="type">Matrix</span></code></h3><div class="doc"><p>The matrix that is used to transform the texture coordinates into the coordinate</p>
+<pre><code> *  space of the parent texture, if there is one. @default null
+ *
+ *  &lt;p&gt;CAUTION: not a copy, but the actual object! Never modify this matrix!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="transformationMatrixToRoot"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#transformationMatrixToRoot"><span class="identifier">transformationMatrixToRoot</span></a>:<span class="type">Matrix</span></code></h3><div class="doc"><p>The matrix that is used to transform the texture coordinates into the coordinate</p>
+<pre><code> *  space of the root texture, if this instance is not the root. @default null
+ *
+ *  &lt;p&gt;CAUTION: not a copy, but the actual object! Never modify this matrix!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="width"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#width"><span class="identifier">width</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in points.</p></div></div></div></div><h3 class="section">Inherited Methods</h3><div class="fields"><div style="display:none"></div><h4><a href="#" class="expand-button"><i class="fa fa-arrow-circle-o-right"></i></a> Defined by <a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></h4><div style="display:none"><div class="field "><a name="getTexCoords"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null, attrName : &quot;texCoords&quot; })</span><a href="#getTexCoords"><span class="identifier">getTexCoords</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span>,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;texCoords&quot;,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Reads a pair of texture coordinates from the given VertexData instance and transforms</p>
+<pre><code> *  them into the current texture's coordinate system. (Remember, the VertexData instance
+ *  will always contain the coordinates in the root texture's coordinate system!)
+</code></pre></div></div><div class="field "><a name="globalToLocal"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null })</span><a href="#globalToLocal"><span class="identifier">globalToLocal</span></a>(<span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span>,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Transforms the given texture coordinates from the root texture's coordinate system</p>
+<pre><code> *  to the local coordinate system.
+</code></pre></div></div><div class="field "><a name="localToGlobal"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null })</span><a href="#localToGlobal"><span class="identifier">localToGlobal</span></a>(<span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span>,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Transforms the given texture coordinates from the local coordinate system</p>
+<pre><code> *  into the root texture's coordinate system.
+</code></pre></div></div><div class="field "><a name="setTexCoords"></a><h3 class="anchor"><code><a href="#setTexCoords"><span class="identifier">setTexCoords</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span>,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span>,</span> <span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Writes the given texture coordinates to a VertexData instance after transforming</p>
+<pre><code> *  them into the root texture's coordinate system. That way, the texture coordinates
+ *  can be used directly to sample the texture in the fragment shader.
+</code></pre></div></div><div class="field "><a name="setupTextureCoordinates"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ attrName : &quot;texCoords&quot;, vertexID : 0 })</span><a href="#setupTextureCoordinates"><span class="identifier">setupTextureCoordinates</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;texCoords&quot;</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets up a VertexData instance with the correct texture coordinates for</p>
+<pre><code> *  4 vertices so that the texture is mapped to the complete quad.
+ *
+ *  @param vertexData  the vertex data to which the texture coordinates will be written.
+ *  @param vertexID    the start position within the VertexData instance.
+ *  @param attrName    the attribute name referencing the vertex positions.
+</code></pre></div></div><div class="field "><a name="setupVertexPositions"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ bounds : null, attrName : &quot;position&quot;, vertexID : 0 })</span><a href="#setupVertexPositions"><span class="identifier">setupVertexPositions</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;position&quot;,</span> <span style="white-space:nowrap">?bounds:<span class="type">Rectangle</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets up a VertexData instance with the correct positions for 4 vertices so that</p>
+<pre><code> *  the texture can be mapped onto it unscaled. If the texture has a &lt;code&gt;frame&lt;/code&gt;,
+ *  the vertices will be offset accordingly.
+ *
+ *  @param vertexData  the VertexData instance to which the positions will be written.
+ *  @param vertexID    the start position within the VertexData instance.
+ *  @param attrName    the attribute name referencing the vertex positions.
+ *  @param bounds      useful only for textures with a frame. This will position the
+ *                     vertices at the correct position within the given bounds,
+ *                     distorted appropriately.
+</code></pre></div></div></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

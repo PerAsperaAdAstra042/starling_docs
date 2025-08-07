@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.textures.Texture - Starling API Reference</title><meta name="description" content="A texture stores the information that represents an image. It cannot be added to the
+ *  display list directly; instead it has to be mapped onto a display object. In Starling,
+ *  the most probably candidate for this job is the &lt;code&gt;Image&lt;/code&gt; class."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/textures/Texture.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> Texture</h1><h4><small>package <a href="../../starling/textures/index.html">starling.textures</a></small></h4>    <h4><small><span class="muted">extended by </span><a class="type" title="starling.textures.ConcreteTexture - A ConcreteTexture wraps a Stage3D texture object, storing the properties of the texture   and providing utility methods for data upload, etc." href="../../starling/textures/ConcreteTexture.html">ConcreteTexture</a>, <a class="type" title="starling.textures.SubTexture - A SubTexture represents a section of another texture." href="../../starling/textures/SubTexture.html">SubTexture</a></small></h4><span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>A texture stores the information that represents an image. It cannot be added to the
+ *  display list directly; instead it has to be mapped onto a display object. In Starling,
+ *  the most probably candidate for this job is the <code>Image</code> class.</p>
+ *
+ *  <strong>Creating a texture</strong>
+ *
+ *  <p>The <code>Texture</code> class is abstract, i.e. you cannot create instance of this
+ *  class through its constructor. Instead, it offers a variety of factory methods, like
+ *  <code>fromBitmapData</code> or <code>fromEmbeddedAsset</code>.</p>
+ *
+ *  <strong>Texture Formats</strong>
+ *
+ *  <p>Since textures can be created from a "BitmapData" object, Starling supports any bitmap
+ *  format that is supported by Flash. And since you can render any Flash display object into
+ *  a BitmapData object, you can use this to display non-Starling content in Starling - e.g.
+ *  Shape objects.</p>
+ *
+ *  <p>Starling also supports ATF textures (Adobe Texture Format), which is a container for
+ *  compressed texture formats that can be rendered very efficiently by the GPU. Refer to
+ *  the Flash documentation for more information about this format.</p>
+ *
+ *  <p>Beginning with AIR 17, you can use Starling textures to show video content (if the
+ *  current platform supports it; see "SystemUtil.supportsVideoTexture").
+ *  The two factory methods "fromCamera" and "fromNetStream" allow you to make use of
+ *  this feature.</p>
+ *
+ *  <strong>Mip Mapping</strong>
+ *
+ *  <p>MipMaps are scaled down versions of a texture. When an image is displayed smaller than
+ *  its natural size, the GPU may display the mip maps instead of the original texture. This
+ *  reduces aliasing and accelerates rendering. It does, however, also need additional memory;
+ *  for that reason, mipmapping is disabled by default.</p>
+ *
+ *  <strong>Texture Frame</strong>
+ *
+ *  <p>The frame property of a texture allows you to let a texture appear inside the bounds of
+ *  an image, leaving a transparent border around the texture. The frame rectangle is specified
+ *  in the coordinate system of the texture (not the image):</p>
+ *
+ *  <listing>
+ *  var frame:Rectangle = new Rectangle(-10, -10, 30, 30);
+ *  var texture:Texture = Texture.fromTexture(anotherTexture, null, frame);
+ *  var image:Image = new Image(texture);</listing>
+ *
+ *  <p>This code would create an image with a size of 30x30, with the texture placed at
+ *  <code>x=10, y=10</code> within that image (assuming that 'anotherTexture' has a width and
+ *  height of 10 pixels, it would appear in the middle of the image).</p>
+ *
+ *  <p>The texture atlas makes use of this feature, as it allows to crop transparent edges
+ *  of a texture and making up for the changed size by specifying the original texture frame.
+ *  Tools like <a href="http://www.texturepacker.com/">TexturePacker</a> use this to
+ *  optimize the atlas.</p>
+ *
+ *  <strong>Texture Coordinates</strong>
+ *
+ *  <p>If, on the other hand, you want to show only a part of the texture in an image
+ *  (i.e. to crop the the texture), you can either create a subtexture (with the method
+ *  'Texture.fromTexture()' and specifying a rectangle for the region), or you can manipulate
+ *  the texture coordinates of the image object. The method <code>image.setTexCoords</code>
+ *  allows you to do that.</p>
+ *
+ *  <strong>Context Loss</strong>
+ *
+ *  <p>When the current rendering context is lost (which can happen on all platforms, but is
+ *  especially common on Android and Windows), all texture data is destroyed. However,
+ *  Starling will try to restore the textures. To do that, it will keep the bitmap
+ *  and ATF data in memory - at the price of increased RAM consumption. You can optimize
+ *  this behavior, though, by restoring the texture directly from its source, like in this
+ *  example:</p>
+ *
+ *  <listing>
+ *  var texture:Texture = Texture.fromBitmap(new EmbeddedBitmap());
+ *  texture.root.onRestore = function():void
+ *  {
+ *      texture.root.uploadFromBitmap(new EmbeddedBitmap());
+ *  };</listing>
+ *
+ *  <p>The <code>onRestore</code>-method will be called when the context was lost and the
+ *  texture has been recreated (but is still empty). If you use the "AssetManager" class to
+ *  manage your textures, this will be done automatically.</p>
+ *
+ *  @see starling.display.Image
+ *  @see starling.utils.AssetManager
+ *  @see starling.utils.SystemUtil
+ *  @see TextureAtlas</div><h3 class="section">Static variables</h3><div class="fields"><div class="field "><a name="asyncBitmapUploadEnabled"></a><h3 class="anchor"><code><span class="label label-static">static</span><a href="#asyncBitmapUploadEnabled"><span class="identifier">asyncBitmapUploadEnabled</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if it should be attempted to upload bitmaps asynchronously when the <code>async</code> parameter</p>
+<pre><code>    *  is supplied to supported methods. Since this feature is still not 100% reliable in AIR 26 (especially on
+    *  Android), it defaults to 'false' for now.
+    *
+    *  &lt;p&gt;If the feature is disabled or not available in the current AIR/Flash runtime, the async callback will
+    *  still be executed; however, the upload itself will be made synchronously.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="maxSize"></a><h3 class="anchor"><code><span class="label label-static">static</span><span class="label">read only</span><a href="#maxSize"><span class="identifier">maxSize</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>Returns the maximum size constraint (for both width and height) for uncompressed</p>
+<pre><code> *  textures in the current Context3D profile.
+</code></pre></div></div></div><h3 class="section">Static methods</h3><div class="fields"><div class="field "><a name="empty"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ forcePotTexture : false, format : &quot;bgra&quot;, scale : -1, optimizeForRenderToTexture : false, mipMapping : false, premultipliedAlpha : true })</span><span class="label label-static">static</span><a href="#empty"><span class="identifier">empty</span></a>(<span style="white-space:nowrap">width:<span class="type">Float</span>,</span> <span style="white-space:nowrap">height:<span class="type">Float</span>,</span> <span style="white-space:nowrap">premultipliedAlpha:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">mipMapping:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">optimizeForRenderToTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = -1,</span> <span style="white-space:nowrap">format:<span class="type">String</span> = &quot;bgra&quot;,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false</span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates an empty texture of a certain size.</p>
+<pre><code> *  Beware that the texture can only be used after you either upload some color data
+ *  ("texture.root.upload...") or clear the texture ("texture.root.clear()").
+ *
+ *  @param width   in points; number of pixels depends on scale parameter
+ *  @param height  in points; number of pixels depends on scale parameter
+ *  @param premultipliedAlpha  the PMA format you will use the texture with. If you will
+ *                 use the texture for bitmap data, use "true"; for ATF data, use "false".
+ *  @param mipMapping  indicates if mipmaps should be used for this texture. When you upload
+ *                 bitmap data, this decides if mipmaps will be created; when you upload ATF
+ *                 data, this decides if mipmaps inside the ATF file will be displayed.
+ *  @param optimizeForRenderToTexture  indicates if this texture will be used as render target
+ *  @param scale   if you omit this parameter, 'Starling.contentScaleFactor' will be used.
+ *  @param format  the context3D texture format to use. Pass one of the packed or
+ *                 compressed formats to save memory (at the price of reduced image quality).
+ *  @param forcePotTexture  indicates if the underlying Stage3D texture should be created
+ *                 as the power-of-two based "Texture" class instead of the more memory
+ *                 efficient "RectangleTexture".
+</code></pre></div></div><div class="field "><a name="fromAtfData"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ premultipliedAlpha : false, async : null, useMipMaps : true, scale : 1 })</span><span class="label label-static">static</span><a href="#fromAtfData"><span class="identifier">fromAtfData</span></a>(<span style="white-space:nowrap">data:<span class="type">ByteArray</span>,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = 1,</span> <span style="white-space:nowrap">useMipMaps:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">?async:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span>,</span> <span style="white-space:nowrap">premultipliedAlpha:<span class="type">Bool</span> = false</span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture from ATF data (Adobe Texture Compression).</p>
+<pre><code> *  Beware: you must not dispose 'data' if Starling should handle a lost device context;
+ *  alternatively, you can handle restoration yourself via "texture.root.onRestore".
+ *
+ *  @param data       the raw data from an ATF file.
+ *  @param scale      the scale factor of the created texture. This affects the reported
+ *                    width and height of the texture object.
+ *  @param useMipMaps If the ATF data contains mipmaps, this parameter controls if they
+ *                    are used; if it does not, this parameter has no effect.
+ *  @param async      If you pass a callback function, the texture will be decoded
+ *                    asynchronously, which allows a smooth framerate even during the
+ *                    loading process. However, don't use the texture before the callback
+ *                    has been executed. This is the expected function definition:
+ *                    &lt;code&gt;function(texture:Texture):void;&lt;/code&gt;
+ *  @param premultipliedAlpha  Indicates if the ATF data contains pixels in PMA format.
+ *                    This is "false" for most ATF files, but can be customized in some
+ *                    tools.
+</code></pre></div></div><div class="field "><a name="fromBitmap"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ async : null, forcePotTexture : false, format : BGRA, scale : 1, optimizeForRenderToTexture : false, generateMipMaps : true })</span><span class="label label-static">static</span><a href="#fromBitmap"><span class="identifier">fromBitmap</span></a>(<span style="white-space:nowrap">bitmap:<span class="type">Bitmap</span>,</span> <span style="white-space:nowrap">generateMipMaps:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">optimizeForRenderToTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = 1,</span> <span style="white-space:nowrap">format:<span class="type">Context3DTextureFormat</span> = BGRA,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">?async:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span></span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture object from a bitmap.</p>
+<pre><code> *  Beware: you must not dispose the bitmap's data if Starling should handle a lost device
+ *  context (except if you handle restoration yourself via "texture.root.onRestore").
+ *
+ *  @param bitmap   the texture will be created with the bitmap data of this object.
+ *  @param generateMipMaps  indicates if mipMaps will be created.
+ *  @param optimizeForRenderToTexture  indicates if this texture will be used as
+ *                  render target
+ *  @param scale    the scale factor of the created texture. This affects the reported
+ *                  width and height of the texture object.
+ *  @param format   the context3D texture format to use. Pass one of the packed or
+ *                  compressed formats to save memory (at the price of reduced image
+ *                  quality).
+ *  @param forcePotTexture  indicates if the underlying Stage3D texture should be created
+ *                  as the power-of-two based "Texture" class instead of the more memory
+ *                  efficient "RectangleTexture".
+ *  @param async    If you pass a callback function, the texture will be uploaded
+ *                  asynchronously, which allows smooth rendering even during the
+ *                  loading process. However, don't use the texture before the callback
+ *                  has been executed. This is the expected function definition:
+ *                  &lt;code&gt;function(texture:Texture, error:ErrorEvent):void;&lt;/code&gt;
+ *                  The second parameter is optional and typically &lt;code&gt;null&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="fromBitmapData"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ async : null, forcePotTexture : false, format : BGRA, scale : 1, optimizeForRenderToTexture : false, generateMipMaps : true })</span><span class="label label-static">static</span><a href="#fromBitmapData"><span class="identifier">fromBitmapData</span></a>(<span style="white-space:nowrap">data:<span class="type">BitmapData</span>,</span> <span style="white-space:nowrap">generateMipMaps:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">optimizeForRenderToTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = 1,</span> <span style="white-space:nowrap">format:<span class="type">Context3DTextureFormat</span> = BGRA,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">?async:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span></span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture object from bitmap data.</p>
+<pre><code> *  Beware: you must not dispose 'data' if Starling should handle a lost device context
+ *  (except if you handle restoration yourself via "texture.root.onRestore").
+ *
+ *  @param data     the bitmap data to upload to the texture.
+ *  @param generateMipMaps  indicates if mipMaps will be created.
+ *  @param optimizeForRenderToTexture  indicates if this texture will be used as
+ *                  render target
+ *  @param scale    the scale factor of the created texture. This affects the reported
+ *                  width and height of the texture object.
+ *  @param format   the context3D texture format to use. Pass one of the packed or
+ *                  compressed formats to save memory (at the price of reduced image
+ *                  quality).
+ *  @param forcePotTexture  indicates if the underlying Stage3D texture should be created
+ *                  as the power-of-two based "Texture" class instead of the more memory
+ *                  efficient "RectangleTexture".
+ *  @param async    If you pass a callback function, the texture will be uploaded
+ *                  asynchronously, which allows smooth rendering even during the
+ *                  loading process. However, don't use the texture before the callback
+ *                  has been executed. This is the expected function definition:
+ *                  &lt;code&gt;function(texture:Texture, error:ErrorEvent):void;&lt;/code&gt;
+ *                  The second parameter is optional and typically &lt;code&gt;null&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="fromColor"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ forcePotTexture : false, format : &quot;bgra&quot;, scale : -1, optimizeForRenderToTexture : false, alpha : 1.0, color : 0xffffff })</span><span class="label label-static">static</span><a href="#fromColor"><span class="identifier">fromColor</span></a>(<span style="white-space:nowrap">width:<span class="type">Float</span>,</span> <span style="white-space:nowrap">height:<span class="type">Float</span>,</span> <span style="white-space:nowrap">color:<span class="type">UInt</span> = 0xffffff,</span> <span style="white-space:nowrap">alpha:<span class="type">Float</span> = 1.0,</span> <span style="white-space:nowrap">optimizeForRenderToTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = -1,</span> <span style="white-space:nowrap">format:<span class="type">String</span> = &quot;bgra&quot;,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false</span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture with a certain size and color.</p>
+<pre><code> *
+ *  @param width   in points; number of pixels depends on scale parameter
+ *  @param height  in points; number of pixels depends on scale parameter
+ *  @param color   the RGB color the texture will be filled up
+ *  @param alpha   the alpha value that will be used for every pixel
+ *  @param optimizeForRenderToTexture  indicates if this texture will be used as render target
+ *  @param scale   if you omit this parameter, 'Starling.contentScaleFactor' will be used.
+ *  @param format  the context3D texture format to use. Pass one of the packed or
+ *                 compressed formats to save memory.
+ *  @param forcePotTexture  indicates if the underlying Stage3D texture should be created
+ *                 as the power-of-two based "Texture" class instead of the more memory
+ *                 efficient "RectangleTexture".
+</code></pre></div></div><div class="field "><a name="fromData"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ options : null })</span><span class="label label-static">static</span><a href="#fromData"><span class="identifier">fromData</span></a>(<span style="white-space:nowrap">data:<span class="type">Dynamic</span>,</span> <span style="white-space:nowrap">?options:<a class="type" title="starling.textures.TextureOptions - The TextureOptions class specifies options for loading textures with the *  Texture." href="../../starling/textures/TextureOptions.html">TextureOptions</a></span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture from any of the supported data types, using the specified options.</p>
+<pre><code> *
+ *  @param data     Either an embedded asset class, a Bitmap, BitmapData, or a ByteArray
+ *                  with ATF data.
+ *  @param options  Specifies options about the texture settings, e.g. the scale factor.
+ *                  If left empty, the default options will be used.
+</code></pre></div></div><div class="field "><a name="fromEmbeddedAsset"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ forcePotTexture : false, format : BGRA, scale : 1, optimizeForRenderToTexture : false, mipMapping : true })</span><span class="label label-static">static</span><a href="#fromEmbeddedAsset"><span class="identifier">fromEmbeddedAsset</span></a>(<span style="white-space:nowrap">assetClass:<span class="type">Class</span>&lt;<span class="type">Dynamic</span>&gt;,</span> <span style="white-space:nowrap">mipMapping:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">optimizeForRenderToTexture:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = 1,</span> <span style="white-space:nowrap">format:<span class="type">Context3DTextureFormat</span> = BGRA,</span> <span style="white-space:nowrap">forcePotTexture:<span class="type">Bool</span> = false</span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture object from an embedded asset class. Textures created with this</p>
+<pre><code> *  method will be restored directly from the asset class in case of a context loss,
+ *  which guarantees a very economic memory usage.
+ *
+ *  @param assetClass  must contain either a Bitmap or a ByteArray with ATF data.
+ *  @param mipMapping  for Bitmaps, indicates if mipMaps will be created;
+ *                     for ATF data, indicates if the contained mipMaps will be used.
+ *  @param optimizeForRenderToTexture  indicates if this texture will be used as
+ *                     render target.
+ *  @param scale       the scale factor of the created texture.
+ *  @param format      the context3D texture format to use. Ignored for ATF data.
+ *  @param forcePotTexture  indicates if the underlying Stage3D texture should be created
+ *                     as the power-of-two based "Texture" class instead of the more memory
+ *                     efficient "RectangleTexture". (Only applicable to bitmaps; ATF
+ *                     textures are always POT-textures, anyway.)
+</code></pre></div></div><div class="field "><a name="fromNetStream"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ onComplete : null, scale : 1 })</span><span class="label label-static">static</span><a href="#fromNetStream"><span class="identifier">fromNetStream</span></a>(<span style="white-space:nowrap">stream:<span class="type">NetStream</span>,</span> <span style="white-space:nowrap">scale:<span class="type">Float</span> = 1,</span> <span style="white-space:nowrap">?onComplete:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span></span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a video texture from a NetStream.</p>
+<pre><code> *
+ *  &lt;p&gt;Below, you'll find  a minimal sample showing how to stream a video from a file.
+ *  Note that &lt;code&gt;ns.play()&lt;/code&gt; is called only after creating the texture, and
+ *  outside the &lt;code&gt;onComplete&lt;/code&gt;-callback. It's recommended to always make the
+ *  calls in this order; otherwise, playback won't start on some platforms.&lt;/p&gt;
+ *
+ *  &lt;listing&gt;
+ *  var nc:NetConnection = new NetConnection();
+ *  nc.connect(null);
+ *  
+ *  var ns:NetStream = new NetStream(nc);
+ *  var texture:Texture = Texture.fromNetStream(ns, 1, function():void
+ *  {
+ *      addChild(new Image(texture));
+ *  });
+ *  
+ *  var file:File = File.applicationDirectory.resolvePath("bugs-bunny.m4v");
+ *  ns.play(file.url);&lt;/listing&gt;
+ *
+ *  @param stream  the NetStream from which the video data is streamed. Beware that 'play'
+ *                 should be called only after the method returns, and outside the
+ *                 &lt;code&gt;onComplete&lt;/code&gt; callback.
+ *  @param scale   the scale factor of the created texture. This affects the reported
+ *                 width and height of the texture object.
+ *  @param onComplete will be executed when the texture is ready. Contains a parameter
+ *                 of type 'Texture'.
+</code></pre></div></div><div class="field "><a name="fromTexture"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ scaleModifier : 1.0, rotated : false, frame : null, region : null })</span><span class="label label-static">static</span><a href="#fromTexture"><span class="identifier">fromTexture</span></a>(<span style="white-space:nowrap">texture:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>,</span> <span style="white-space:nowrap">?region:<span class="type">Rectangle</span>,</span> <span style="white-space:nowrap">?frame:<span class="type">Rectangle</span>,</span> <span style="white-space:nowrap">rotated:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">scaleModifier:<span class="type">Float</span> = 1.0</span>):<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>Creates a texture that contains a region (in pixels) of another texture. The new</p>
+<pre><code> *  texture will reference the base texture; no data is duplicated.
+ *
+ *  @param texture  The texture you want to create a SubTexture from.
+ *  @param region   The region of the parent texture that the SubTexture will show
+ *                  (in points).
+ *  @param frame    If the texture was trimmed, the frame rectangle can be used to restore
+ *                  the trimmed area.
+ *  @param rotated  If true, the SubTexture will show the parent region rotated by
+ *                  90 degrees (CCW).
+ *  @param scaleModifier  The scale factor of the new texture will be calculated by
+ *                  multiplying the parent texture's scale factor with this value.
+</code></pre></div></div><div class="field "><a name="fromTextureBase"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ options : null })</span><span class="label label-static">static</span><a href="#fromTextureBase"><span class="identifier">fromTextureBase</span></a>(<span style="white-space:nowrap">base:<span class="type">TextureBase</span>,</span> <span style="white-space:nowrap">width:<span class="type">Int</span>,</span> <span style="white-space:nowrap">height:<span class="type">Int</span>,</span> <span style="white-space:nowrap">?options:<a class="type" title="starling.textures.TextureOptions - The TextureOptions class specifies options for loading textures with the *  Texture." href="../../starling/textures/TextureOptions.html">TextureOptions</a></span>):<a class="type" title="starling.textures.ConcreteTexture - A ConcreteTexture wraps a Stage3D texture object, storing the properties of the texture   and providing utility methods for data upload, etc." href="../../starling/textures/ConcreteTexture.html">ConcreteTexture</a></code></h3><div class="doc"><p>Creates a texture from a <code>TextureBase</code> object.</p>
+<pre><code> *
+ *  @param base     a Stage3D texture object created through the current context.
+ *  @param width    the width of the texture in pixels (not points!).
+ *  @param height   the height of the texture in pixels (not points!).
+ *  @param options  specifies options about the texture settings, e.g. the scale factor.
+ *                  If left empty, the default options will be used. Note that not all
+ *                  options are supported by all texture types.
+</code></pre></div></div><div class="field "><a name="getMaxSize"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ textureFormat : BGRA })</span><span class="label label-static">static</span><a href="#getMaxSize"><span class="identifier">getMaxSize</span></a>(<span style="white-space:nowrap">textureFormat:<span class="type">Context3DTextureFormat</span> = BGRA</span>):<span class="type">Int</span></code></h3><div class="doc"><p></p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="base"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#base"><span class="identifier">base</span></a>:<span class="type">TextureBase</span></code></h3><div class="doc"><p>The Stage3D texture object the texture is based on.</p></div></div><div class="field "><a name="format"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#format"><span class="identifier">format</span></a>:<span class="type">Context3DTextureFormat</span></code></h3><div class="doc"><p>The <code>Context3DTextureFormat</code> of the underlying texture data.</p></div></div><div class="field "><a name="frame"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frame"><span class="identifier">frame</span></a>:<span class="type">Rectangle</span></code></h3><div class="doc"><p>The texture frame if it has one (see class description), otherwise <code>null</code>.</p>
+<pre><code> *  &lt;p&gt;CAUTION: not a copy, but the actual object! Do not modify!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="frameHeight"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frameHeight"><span class="identifier">frameHeight</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in points, taking into account the frame rectangle</p>
+<pre><code> *  (if there is one).
+</code></pre></div></div><div class="field "><a name="frameWidth"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#frameWidth"><span class="identifier">frameWidth</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in points, taking into account the frame rectangle</p>
+<pre><code> *  (if there is one).
+</code></pre></div></div><div class="field "><a name="height"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#height"><span class="identifier">height</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in points.</p></div></div><div class="field "><a name="mipMapping"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#mipMapping"><span class="identifier">mipMapping</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the texture contains mip maps.</p></div></div><div class="field "><a name="nativeHeight"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#nativeHeight"><span class="identifier">nativeHeight</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The height of the texture in pixels (without scale adjustment).</p></div></div><div class="field "><a name="nativeWidth"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#nativeWidth"><span class="identifier">nativeWidth</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in pixels (without scale adjustment).</p></div></div><div class="field "><a name="premultipliedAlpha"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#premultipliedAlpha"><span class="identifier">premultipliedAlpha</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the alpha values are premultiplied into the RGB values.</p></div></div><div class="field "><a name="root"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#root"><span class="identifier">root</span></a>:<a class="type" title="starling.textures.ConcreteTexture - A ConcreteTexture wraps a Stage3D texture object, storing the properties of the texture   and providing utility methods for data upload, etc." href="../../starling/textures/ConcreteTexture.html">ConcreteTexture</a></code></h3><div class="doc"><p>The concrete texture the texture is based on.</p></div></div><div class="field "><a name="scale"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#scale"><span class="identifier">scale</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The scale factor, which influences width and height properties.</p></div></div><div class="field "><a name="transformationMatrix"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#transformationMatrix"><span class="identifier">transformationMatrix</span></a>:<span class="type">Matrix</span></code></h3><div class="doc"><p>The matrix that is used to transform the texture coordinates into the coordinate</p>
+<pre><code> *  space of the parent texture, if there is one. @default null
+ *
+ *  &lt;p&gt;CAUTION: not a copy, but the actual object! Never modify this matrix!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="transformationMatrixToRoot"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#transformationMatrixToRoot"><span class="identifier">transformationMatrixToRoot</span></a>:<span class="type">Matrix</span></code></h3><div class="doc"><p>The matrix that is used to transform the texture coordinates into the coordinate</p>
+<pre><code> *  space of the root texture, if this instance is not the root. @default null
+ *
+ *  &lt;p&gt;CAUTION: not a copy, but the actual object! Never modify this matrix!&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="width"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#width"><span class="identifier">width</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The width of the texture in points.</p></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="dispose"></a><h3 class="anchor"><code><a href="#dispose"><span class="identifier">dispose</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Disposes the underlying texture data. Note that not all textures need to be disposed:</p>
+<pre><code> *  SubTextures (created with 'Texture.fromTexture') just reference other textures and
+ *  and do not take up resources themselves; this is also true for textures from an
+ *  atlas.
+</code></pre></div></div><div class="field "><a name="getTexCoords"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null, attrName : &quot;texCoords&quot; })</span><a href="#getTexCoords"><span class="identifier">getTexCoords</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span>,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;texCoords&quot;,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Reads a pair of texture coordinates from the given VertexData instance and transforms</p>
+<pre><code> *  them into the current texture's coordinate system. (Remember, the VertexData instance
+ *  will always contain the coordinates in the root texture's coordinate system!)
+</code></pre></div></div><div class="field "><a name="globalToLocal"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null })</span><a href="#globalToLocal"><span class="identifier">globalToLocal</span></a>(<span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span>,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Transforms the given texture coordinates from the root texture's coordinate system</p>
+<pre><code> *  to the local coordinate system.
+</code></pre></div></div><div class="field "><a name="localToGlobal"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null })</span><a href="#localToGlobal"><span class="identifier">localToGlobal</span></a>(<span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span>,</span> <span style="white-space:nowrap">?out:<span class="type">Point</span></span>):<span class="type">Point</span></code></h3><div class="doc"><p>Transforms the given texture coordinates from the local coordinate system</p>
+<pre><code> *  into the root texture's coordinate system.
+</code></pre></div></div><div class="field "><a name="setTexCoords"></a><h3 class="anchor"><code><a href="#setTexCoords"><span class="identifier">setTexCoords</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span>,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span>,</span> <span style="white-space:nowrap">u:<span class="type">Float</span>,</span> <span style="white-space:nowrap">v:<span class="type">Float</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Writes the given texture coordinates to a VertexData instance after transforming</p>
+<pre><code> *  them into the root texture's coordinate system. That way, the texture coordinates
+ *  can be used directly to sample the texture in the fragment shader.
+</code></pre></div></div><div class="field "><a name="setupTextureCoordinates"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ attrName : &quot;texCoords&quot;, vertexID : 0 })</span><a href="#setupTextureCoordinates"><span class="identifier">setupTextureCoordinates</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;texCoords&quot;</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets up a VertexData instance with the correct texture coordinates for</p>
+<pre><code> *  4 vertices so that the texture is mapped to the complete quad.
+ *
+ *  @param vertexData  the vertex data to which the texture coordinates will be written.
+ *  @param vertexID    the start position within the VertexData instance.
+ *  @param attrName    the attribute name referencing the vertex positions.
+</code></pre></div></div><div class="field "><a name="setupVertexPositions"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ bounds : null, attrName : &quot;position&quot;, vertexID : 0 })</span><a href="#setupVertexPositions"><span class="identifier">setupVertexPositions</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">vertexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">attrName:<span class="type">String</span> = &quot;position&quot;,</span> <span style="white-space:nowrap">?bounds:<span class="type">Rectangle</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets up a VertexData instance with the correct positions for 4 vertices so that</p>
+<pre><code> *  the texture can be mapped onto it unscaled. If the texture has a &lt;code&gt;frame&lt;/code&gt;,
+ *  the vertices will be offset accordingly.
+ *
+ *  @param vertexData  the VertexData instance to which the positions will be written.
+ *  @param vertexID    the start position within the VertexData instance.
+ *  @param attrName    the attribute name referencing the vertex positions.
+ *  @param bounds      useful only for textures with a frame. This will position the
+ *                     vertices at the correct position within the given bounds,
+ *                     distorted appropriately.
+</code></pre></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
