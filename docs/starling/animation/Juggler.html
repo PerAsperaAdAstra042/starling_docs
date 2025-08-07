@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.animation.Juggler - Starling API Reference</title><meta name="description" content="The Juggler takes objects that implement IAnimatable (like Tweens) and executes them.
+&lt;em&gt; 
+&lt;/em&gt;  &lt;p&gt;A juggler is a simple object. It does no more than saving a list of objects implementing 
+&lt;em&gt;  &quot;IAnimatable&quot; and advancing their time if it is told to do so (by calling its own 
+&lt;/em&gt;  &quot;advanceTime&quot;-method). When an animation is completed, it throws it away."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/animation/Juggler.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> Juggler</h1><h4><small>package <a href="../../starling/animation/index.html">starling.animation</a></small></h4>    <h4><small>implements <a class="type" title="starling.animation.IAnimatable - The IAnimatable interface describes objects that are animated depending on the passed time." href="../../starling/animation/IAnimatable.html">IAnimatable</a></small></h4><span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>The Juggler takes objects that implement IAnimatable (like Tweens) and executes them.
+<em> 
+</em>  <p>A juggler is a simple object. It does no more than saving a list of objects implementing 
+<em>  "IAnimatable" and advancing their time if it is told to do so (by calling its own 
+</em>  "advanceTime"-method). When an animation is completed, it throws it away.</p>
+<em><br />
+</em>  <p>There is a default juggler available at the Starling class:</p>
+<em><br />
+</em>  <pre>
+<em>  var juggler:Juggler = Starling.juggler;
+</em>  </pre>
+<em><br />
+</em>  <p>You can create juggler objects yourself, just as well. That way, you can group 
+<em>  your game into logical components that handle their animations independently. All you have
+</em>  to do is call the "advanceTime" method on your custom juggler once per frame.</p>
+<em><br />
+</em>  <p>Another handy feature of the juggler is the "delayCall"-method. Use it to 
+<em>  execute a function at a later time. Different to conventional approaches, the method
+</em>  will only be called when the juggler is advanced, giving you perfect control over the 
+<em>  call.</p>
+</em><br />
+<em>  <pre>
+</em>  juggler.delayCall(object.removeFromParent, 1.0);
+<em>  juggler.delayCall(object.addChild, 2.0, theChild);
+</em>  juggler.delayCall(function():Void { rotation += 0.1; }, 3.0);
+<em>  </pre>
+</em> 
+<em>  @see Tween
+</em>  @see DelayedCall</p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p>Create an empty juggler.</p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="elapsedTime"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#elapsedTime"><span class="identifier">elapsedTime</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The total life time of the juggler (in seconds).</p></div></div><div class="field "><a name="timeScale"></a><h3 class="anchor"><code><a href="#timeScale"><span class="identifier">timeScale</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The scale at which the time is passing. This can be used for slow motion or time laps</p>
+<pre><code> *  effects. Values below '1' will make all animations run slower, values above '1' faster.
+ *  @default 1.0
+</code></pre></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="add"></a><h3 class="anchor"><code><a href="#add"><span class="identifier">add</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.animation.IAnimatable - The IAnimatable interface describes objects that are animated depending on the passed time." href="../../starling/animation/IAnimatable.html">IAnimatable</a></span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Adds an object to the juggler.</p>
+<pre><code> *
+ *  @return Unique numeric identifier for the animation. This identifier may be used
+ *          to remove the object via &lt;code&gt;removeByID()&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="addWithID"></a><h3 class="anchor"><code><a href="#addWithID"><span class="identifier">addWithID</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.animation.IAnimatable - The IAnimatable interface describes objects that are animated depending on the passed time." href="../../starling/animation/IAnimatable.html">IAnimatable</a>,</span> <span style="white-space:nowrap">objectID:<span class="type">UInt</span></span>):<span class="type">UInt</span></code></h3><div class="doc"><p></p></div></div><div class="field "><a name="advanceTime"></a><h3 class="anchor"><code><a href="#advanceTime"><span class="identifier">advanceTime</span></a>(<span style="white-space:nowrap">time:<span class="type">Float</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Advances all objects by a certain time (in seconds).</p></div></div><div class="field "><a name="contains"></a><h3 class="anchor"><code><a href="#contains"><span class="identifier">contains</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.animation.IAnimatable - The IAnimatable interface describes objects that are animated depending on the passed time." href="../../starling/animation/IAnimatable.html">IAnimatable</a></span>):<span class="type">Bool</span></code></h3><div class="doc"><p>Determines if an object has been added to the juggler.</p></div></div><div class="field "><a name="containsDelayedCalls"></a><h3 class="anchor"><code><a href="#containsDelayedCalls"><span class="identifier">containsDelayedCalls</span></a>(<span style="white-space:nowrap">callback:<span class="type">Function</span></span>):<span class="type">Bool</span></code></h3><div class="doc"><p>Figures out if the juggler contains one or more delayed calls with a certain callback.</p></div></div><div class="field "><a name="containsTweens"></a><h3 class="anchor"><code><a href="#containsTweens"><span class="identifier">containsTweens</span></a>(<span style="white-space:nowrap">target:<span class="type">Dynamic</span></span>):<span class="type">Bool</span></code></h3><div class="doc"><p>Figures out if the juggler contains one or more tweens with a certain target.</p></div></div><div class="field "><a name="delayCall"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ args : null })</span><a href="#delayCall"><span class="identifier">delayCall</span></a>(<span style="white-space:nowrap">call:<span class="type">Function</span>,</span> <span style="white-space:nowrap">delay:<span class="type">Float</span>,</span> <span style="white-space:nowrap">?args:<span class="type">Array</span>&lt;<span class="type">Dynamic</span>&gt;</span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Delays the execution of a function until <code>delay</code> seconds have passed.</p>
+<pre><code> *  This method provides a convenient alternative for creating and adding a DelayedCall
+ *  manually.
+ *
+ *  @return Unique numeric identifier for the delayed call. This identifier may be used
+ *          to remove the object via &lt;code&gt;removeByID()&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="purge"></a><h3 class="anchor"><code><a href="#purge"><span class="identifier">purge</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Removes all objects at once.</p></div></div><div class="field "><a name="remove"></a><h3 class="anchor"><code><a href="#remove"><span class="identifier">remove</span></a>(<span style="white-space:nowrap">object:<a class="type" title="starling.animation.IAnimatable - The IAnimatable interface describes objects that are animated depending on the passed time." href="../../starling/animation/IAnimatable.html">IAnimatable</a></span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Removes an object from the juggler.</p>
+<pre><code> *
+ *  @return The (now meaningless) unique numeric identifier for the animation, or zero
+ *          if the object was not found.
+</code></pre></div></div><div class="field "><a name="removeByID"></a><h3 class="anchor"><code><a href="#removeByID"><span class="identifier">removeByID</span></a>(<span style="white-space:nowrap">objectID:<span class="type">UInt</span></span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Removes an object from the juggler, identified by the unique numeric identifier you</p>
+<pre><code> *  received when adding it.
+ *
+ *  &lt;p&gt;It's not uncommon that an animatable object is added to a juggler repeatedly,
+ *  e.g. when using an object-pool. Thus, when using the &lt;code&gt;remove&lt;/code&gt; method,
+ *  you might accidentally remove an object that has changed its context. By using
+ *  &lt;code&gt;removeByID&lt;/code&gt; instead, you can be sure to avoid that, since the objectID
+ *  will always be unique.&lt;/p&gt;
+ *
+ *  @return if successful, the passed objectID; if the object was not found, zero.
+</code></pre></div></div><div class="field "><a name="removeDelayedCalls"></a><h3 class="anchor"><code><a href="#removeDelayedCalls"><span class="identifier">removeDelayedCalls</span></a>(<span style="white-space:nowrap">callback:<span class="type">Function</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Removes all delayed and repeated calls with a certain callback.</p></div></div><div class="field "><a name="removeTweens"></a><h3 class="anchor"><code><a href="#removeTweens"><span class="identifier">removeTweens</span></a>(<span style="white-space:nowrap">target:<span class="type">Dynamic</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Removes all tweens with a certain target.</p></div></div><div class="field "><a name="repeatCall"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ args : null, repeatCount : 0 })</span><a href="#repeatCall"><span class="identifier">repeatCall</span></a>(<span style="white-space:nowrap">call:<span class="type">Function</span>,</span> <span style="white-space:nowrap">interval:<span class="type">Float</span>,</span> <span style="white-space:nowrap">repeatCount:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">?args:<span class="type">Array</span>&lt;<span class="type">Dynamic</span>&gt;</span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Runs a function at a specified interval (in seconds). A 'repeatCount' of zero</p>
+<pre><code> *  means that it runs indefinitely.
+ *
+ *  @return Unique numeric identifier for the delayed call. This identifier may be used
+ *          to remove the object via &lt;code&gt;removeByID()&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="tween"></a><h3 class="anchor"><code><a href="#tween"><span class="identifier">tween</span></a>(<span style="white-space:nowrap">target:<span class="type">Dynamic</span>,</span> <span style="white-space:nowrap">time:<span class="type">Float</span>,</span> <span style="white-space:nowrap">properties:<span class="type">Dynamic</span></span>):<span class="type">UInt</span></code></h3><div class="doc"><p>Utilizes a tween to animate the target object over <code>time</code> seconds. Internally,</p>
+<pre><code> *  this method uses a tween instance (taken from an object pool) that is added to the
+ *  juggler right away. This method provides a convenient alternative for creating 
+ *  and adding a tween manually.
+ *  
+ *  &lt;p&gt;Fill 'properties' with key-value pairs that describe both the 
+ *  tween and the animation target. Here is an example:&lt;/p&gt;
+ *  
+ *  &lt;pre&gt;
+ *  juggler.tween(object, 2.0, {
+ *      transition: Transitions.EASE_IN_OUT,
+ *      delay: 20, // -&gt; tween.delay = 20
+ *      x: 50      // -&gt; tween.animate("x", 50)
+ *  });
+ *  &lt;/pre&gt; 
+ *
+ *  &lt;p&gt;To cancel the tween, call 'Juggler.removeTweens' with the same target, or pass
+ *  the returned ID to 'Juggler.removeByID()'.&lt;/p&gt;
+ *
+ *  &lt;p&gt;Note that some property types may be animated in a special way:&lt;/p&gt;
+ *  &lt;ul&gt;
+ *    &lt;li&gt;If the property contains the string &lt;code&gt;color&lt;/code&gt; or &lt;code&gt;Color&lt;/code&gt;,
+ *        it will be treated as an unsigned integer with a color value
+ *        (e.g. &lt;code&gt;0xff0000&lt;/code&gt; for red). Each color channel will be animated
+ *        individually.&lt;/li&gt;
+ *    &lt;li&gt;The same happens if you append the string &lt;code&gt;#rgb&lt;/code&gt; to the name.&lt;/li&gt;
+ *    &lt;li&gt;If you append &lt;code&gt;#rad&lt;/code&gt;, the property is treated as an angle in radians,
+ *        making sure it always uses the shortest possible arc for the rotation.&lt;/li&gt;
+ *    &lt;li&gt;The string &lt;code&gt;#deg&lt;/code&gt; does the same for angles in degrees.&lt;/li&gt;
+ *  &lt;/ul&gt;
+</code></pre></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

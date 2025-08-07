@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.rendering.RenderState - Starling API Reference</title><meta name="description" content="The RenderState stores a combination of settings that are currently used for rendering.
+&lt;em&gt;  This includes modelview and transformation matrices as well as context3D related settings.
+&lt;/em&gt;
+&lt;em&gt;  &lt;p&gt;Starling&#039;s Painter instance stores a reference to the current RenderState.
+&lt;/em&gt;  Via a stack mechanism, you can always save a specific state and restore it later.
+&lt;em&gt;  That makes it easy to write rendering code that doesn&#039;t have any side effects."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/rendering/RenderState.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> RenderState</h1><h4><small>package <a href="../../starling/rendering/index.html">starling.rendering</a></small></h4>    <span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>The RenderState stores a combination of settings that are currently used for rendering.
+<em>  This includes modelview and transformation matrices as well as context3D related settings.
+</em>
+<em>  <p>Starling's Painter instance stores a reference to the current RenderState.
+</em>  Via a stack mechanism, you can always save a specific state and restore it later.
+<em>  That makes it easy to write rendering code that doesn't have any side effects.</p>
+</em>
+<em>  <p>Beware that any context-related settings are not applied on the context
+</em>  right away, but only after calling <code>painter.prepareToDraw()</code>.
+<em>  However, the Painter recognizes changes to those settings and will finish the current
+</em>  batch right away if necessary.</p>
+<em>
+</em>  <strong>Matrix Magic</strong>
+<em>
+</em>  <p>On rendering, Starling traverses the display tree, constantly moving from one
+<em>  coordinate system to the next. Each display object stores its vertex coordinates
+</em>  in its local coordinate system; on rendering, they must be moved to a global,
+<em>  2D coordinate space (the so-called "clip-space"). To handle these calculations,
+</em>  the RenderState contains a set of matrices.</p>
+<em>
+</em>  <p>By multiplying vertex coordinates with the <code>modelviewMatrix</code>, you'll get the
+<em>  coordinates in "screen-space", or in other words: in stage coordinates. (Optionally,
+</em>  there's also a 3D version of this matrix. It comes into play when you're working with
+<em>  <code>Sprite3D</code> containers.)</p>
+</em>
+<em>  <p>By feeding the result of the previous transformation into the
+</em>  <code>projectionMatrix</code>, you'll end up with so-called "clipping coordinates",
+<em>  which are in the range <code>[-1, 1]</code> (just as needed by the graphics pipeline).
+</em>  If you've got vertices in the 3D space, this matrix will also execute a perspective
+<em>  projection.</p>
+</em>
+<em>  <p>Finally, there's the <code>mvpMatrix</code>, which is short for
+</em>  "modelviewProjectionMatrix". This is simply a combination of <code>modelview-</code> and
+<em>  <code>projectionMatrix</code>, combining the effects of both. Pass this matrix
+</em>  to the vertex shader and all your vertices will automatically end up at the right
+<em>  position.</p>
+</em>
+<em>  @see Painter
+</em>  @see starling.display.Sprite3D</p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p>Creates a new render state with the default settings.</p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="alpha"></a><h3 class="anchor"><code><a href="#alpha"><span class="identifier">alpha</span></a>:<span class="type">Float</span></code></h3><div class="doc"><p>The current, cumulated alpha value. Beware that, in a standard 'render' method,</p>
+<pre><code> *  this already includes the current object! The value is the product of current object's
+ *  alpha value and all its parents. @default 1.0
+</code></pre></div></div><div class="field "><a name="blendMode"></a><h3 class="anchor"><code><a href="#blendMode"><span class="identifier">blendMode</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>The blend mode to be used on rendering. A value of "auto" is ignored, since it</p>
+<pre><code> *  means that the mode should remain unchanged.
+ *
+ *  @default BlendMode.NORMAL
+ *  @see starling.display.BlendMode
+</code></pre></div></div><div class="field "><a name="clipRect"></a><h3 class="anchor"><code><a href="#clipRect"><span class="identifier">clipRect</span></a>:<span class="type">Rectangle</span></code></h3><div class="doc"><p>The clipping rectangle can be used to limit rendering in the current render target to</p>
+<pre><code> *  a certain area. This method expects the rectangle in stage coordinates. To prevent
+ *  any clipping, assign &lt;code&gt;null&lt;/code&gt;.
+ *
+ *  @default null
+</code></pre></div></div><div class="field "><a name="culling"></a><h3 class="anchor"><code><a href="#culling"><span class="identifier">culling</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>Sets the triangle culling mode. Allows to exclude triangles from rendering based on</p>
+<pre><code> *  their orientation relative to the view plane.
+ *  @default Context3DTriangleFace.NONE
+</code></pre></div></div><div class="field "><a name="depthMask"></a><h3 class="anchor"><code><a href="#depthMask"><span class="identifier">depthMask</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Enables or disables depth buffer writes.</p>
+<pre><code>    *  @default false
+</code></pre></div></div><div class="field "><a name="depthTest"></a><h3 class="anchor"><code><a href="#depthTest"><span class="identifier">depthTest</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>Sets type of comparison used for depth testing.</p>
+<pre><code>    *  @default Context3DCompareMode.ALWAYS
+</code></pre></div></div><div class="field "><a name="is3D"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#is3D"><span class="identifier">is3D</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if there have been any 3D transformations.</p>
+<pre><code> *  Returns &lt;code&gt;true&lt;/code&gt; if the 3D modelview matrix contains a value.
+</code></pre></div></div><div class="field "><a name="modelviewMatrix"></a><h3 class="anchor"><code><a href="#modelviewMatrix"><span class="identifier">modelviewMatrix</span></a>:<span class="type">Matrix</span></code></h3><div class="doc"><p>Returns the current 2D modelview matrix.</p>
+<pre><code> *  CAUTION: Use with care! Each call returns the same instance.
+ *  @default identity matrix
+</code></pre></div></div><div class="field "><a name="modelviewMatrix3D"></a><h3 class="anchor"><code><a href="#modelviewMatrix3D"><span class="identifier">modelviewMatrix3D</span></a>:<span class="type">Matrix3D</span></code></h3><div class="doc"><p>Returns the current 3D modelview matrix, if there have been 3D transformations.</p>
+<pre><code> *  CAUTION: Use with care! Each call returns the same instance.
+ *  @default null
+</code></pre></div></div><div class="field "><a name="mvpMatrix3D"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#mvpMatrix3D"><span class="identifier">mvpMatrix3D</span></a>:<span class="type">Matrix3D</span></code></h3><div class="doc"><p>Calculates the product of modelview and projection matrix and stores it in a 3D matrix.</p>
+<pre><code> *  CAUTION: Use with care! Each call returns the same instance.
+</code></pre></div></div><div class="field "><a name="projectionMatrix3D"></a><h3 class="anchor"><code><a href="#projectionMatrix3D"><span class="identifier">projectionMatrix3D</span></a>:<span class="type">Matrix3D</span></code></h3><div class="doc"><p>Returns the current projection matrix. You can use the method 'setProjectionMatrix3D'</p>
+<pre><code> *  to set it up in an intuitive way.
+ *  CAUTION: Use with care! Each call returns the same instance. If you modify the matrix
+ *           in place, you have to call &lt;code&gt;setProjectionMatrixChanged&lt;/code&gt;.
+ *  @default identity matrix
+</code></pre></div></div><div class="field "><a name="renderTarget"></a><h3 class="anchor"><code><a href="#renderTarget"><span class="identifier">renderTarget</span></a>:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a></code></h3><div class="doc"><p>The texture that is currently being rendered into, or <code>null</code></p>
+<pre><code> *  to render into the back buffer. On assignment, calls &lt;code&gt;setRenderTarget&lt;/code&gt;
+ *  with its default parameters.
+</code></pre></div></div><div class="field "><a name="renderTargetAntiAlias"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#renderTargetAntiAlias"><span class="identifier">renderTargetAntiAlias</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>The anti-alias setting used when setting the current render target</p>
+<pre><code> *  via &lt;code&gt;setRenderTarget&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="renderTargetSupportsDepthAndStencil"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#renderTargetSupportsDepthAndStencil"><span class="identifier">renderTargetSupportsDepthAndStencil</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if the render target (set via <code>setRenderTarget</code>)</p>
+<pre><code> *  has its depth and stencil buffers enabled.
+</code></pre></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="copyFrom"></a><h3 class="anchor"><code><a href="#copyFrom"><span class="identifier">copyFrom</span></a>(<span style="white-space:nowrap">renderState:<a class="type" title="starling.rendering.RenderState - The RenderState stores a combination of settings that are currently used for rendering." href="../../starling/rendering/RenderState.html">RenderState</a></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Duplicates all properties of another instance on the current instance.</p></div></div><div class="field "><a name="reset"></a><h3 class="anchor"><code><a href="#reset"><span class="identifier">reset</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Resets the RenderState to the default settings.</p>
+<pre><code> *  (Check each property documentation for its default value.)
+</code></pre></div></div><div class="field "><a name="setModelviewMatricesToIdentity"></a><h3 class="anchor"><code><a href="#setModelviewMatricesToIdentity"><span class="identifier">setModelviewMatricesToIdentity</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Changes the modelview matrices (2D and, if available, 3D) to identity matrices.</p>
+<pre><code> *  An object transformed an identity matrix performs no transformation.
+</code></pre></div></div><div class="field "><a name="setProjectionMatrix"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ cameraPos : null, stageHeight : 0, stageWidth : 0 })</span><a href="#setProjectionMatrix"><span class="identifier">setProjectionMatrix</span></a>(<span style="white-space:nowrap">x:<span class="type">Float</span>,</span> <span style="white-space:nowrap">y:<span class="type">Float</span>,</span> <span style="white-space:nowrap">width:<span class="type">Float</span>,</span> <span style="white-space:nowrap">height:<span class="type">Float</span>,</span> <span style="white-space:nowrap">stageWidth:<span class="type">Float</span> = 0,</span> <span style="white-space:nowrap">stageHeight:<span class="type">Float</span> = 0,</span> <span style="white-space:nowrap">?cameraPos:<span class="type">Vector3D</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Creates a perspective projection matrix suitable for 2D and 3D rendering.</p>
+<pre><code> *
+ *  &lt;p&gt;The first 4 parameters define which area of the stage you want to view (the camera
+ *  will 'zoom' to exactly this region). The final 3 parameters determine the perspective
+ *  in which you're looking at the stage.&lt;/p&gt;
+ *
+ *  &lt;p&gt;The stage is always on the rectangle that is spawned up between x- and y-axis (with
+ *  the given size). All objects that are exactly on that rectangle (z equals zero) will be
+ *  rendered in their true size, without any distortion.&lt;/p&gt;
+ *
+ *  &lt;p&gt;If you pass only the first 4 parameters, the camera will be set up above the center
+ *  of the stage, with a field of view of 1.0 rad.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="setProjectionMatrixChanged"></a><h3 class="anchor"><code><a href="#setProjectionMatrixChanged"><span class="identifier">setProjectionMatrixChanged</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>This method needs to be called whenever <code>projectionMatrix3D</code> was changed</p>
+<pre><code> *  other than via &lt;code&gt;setProjectionMatrix&lt;/code&gt;.
+</code></pre></div></div><div class="field "><a name="setRenderTarget"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ antiAlias : 0, enableDepthAndStencil : true })</span><a href="#setRenderTarget"><span class="identifier">setRenderTarget</span></a>(<span style="white-space:nowrap">target:<a class="type" title="starling.textures.Texture - A texture stores the information that represents an image." href="../../starling/textures/Texture.html">Texture</a>,</span> <span style="white-space:nowrap">enableDepthAndStencil:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">antiAlias:<span class="type">Int</span> = 0</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Changes the the current render target.</p>
+<pre><code> *
+ *  @param target     Either a texture or &lt;code&gt;null&lt;/code&gt; to render into the back buffer.
+ *  @param enableDepthAndStencil  Indicates if depth and stencil testing will be available.
+ *                    This parameter affects only texture targets.
+ *  @param antiAlias  The anti-aliasing quality (range: &lt;code&gt;0 - 4&lt;/code&gt;).
+ *                    This parameter affects only texture targets. Note that at the time
+ *                    of this writing, AIR supports anti-aliasing only on Desktop.
+</code></pre></div></div><div class="field "><a name="transformModelviewMatrix"></a><h3 class="anchor"><code><a href="#transformModelviewMatrix"><span class="identifier">transformModelviewMatrix</span></a>(<span style="white-space:nowrap">matrix:<span class="type">Matrix</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Prepends the given matrix to the 2D modelview matrix.</p></div></div><div class="field "><a name="transformModelviewMatrix3D"></a><h3 class="anchor"><code><a href="#transformModelviewMatrix3D"><span class="identifier">transformModelviewMatrix3D</span></a>(<span style="white-space:nowrap">matrix:<span class="type">Matrix3D</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Prepends the given matrix to the 3D modelview matrix.</p>
+<pre><code> *  The current contents of the 2D modelview matrix is stored in the 3D modelview matrix
+ *  before doing so; the 2D modelview matrix is then reset to the identity matrix.
+</code></pre></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.rendering.Effect - Starling API Reference</title><meta name="description" content="An effect encapsulates all steps of a Stage3D draw operation. It configures the
+&lt;em&gt;  render context and sets up shader programs as well as index- and vertex-buffers, thus
+&lt;/em&gt;  providing the basic mechanisms of all low-level rendering.
+&lt;em&gt;
+&lt;/em&gt;  &lt;p&gt;&lt;strong&gt;Using the Effect class&lt;/strong&gt;"/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/rendering/Effect.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> Effect</h1><h4><small>package <a href="../../starling/rendering/index.html">starling.rendering</a></small></h4>    <h4><small><span class="muted">extended by </span><a class="type" title="starling.rendering.FilterEffect - An effect drawing a mesh of textured vertices." href="../../starling/rendering/FilterEffect.html">FilterEffect</a></small></h4><span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>An effect encapsulates all steps of a Stage3D draw operation. It configures the
+<em>  render context and sets up shader programs as well as index- and vertex-buffers, thus
+</em>  providing the basic mechanisms of all low-level rendering.
+<em>
+</em>  <p><strong>Using the Effect class</strong></p>
+<em>
+</em>  <p>Effects are mostly used by the <code>MeshStyle</code> and <code>FragmentFilter</code>
+<em>  classes. When you extend those classes, you'll be required to provide a custom effect.
+</em>  Setting it up for rendering is done by the base class, though, so you rarely have to
+<em>  initiate the rendering yourself. Nevertheless, it's good to know how an effect is doing
+</em>  its work.</p>
+<em>
+</em>  <p>Using an effect always follows steps shown in the example below. You create the
+<em>  effect, configure it, upload vertex data and then: draw!</p>
+</em>
+<em>  <listing>
+</em>  // create effect
+<em>  var effect:MeshEffect = new MeshEffect();
+</em><br />
+<em>  // configure effect
+</em>  effect.mvpMatrix3D = painter.state.mvpMatrix3D;
+<em>  effect.texture = getHeroTexture();
+</em>  effect.color = 0xf0f0f0;
+<em><br />
+</em>  // upload vertex data
+<em>  effect.uploadIndexData(indexData);
+</em>  effect.uploadVertexData(vertexData);
+<em><br />
+</em>  // draw!
+<em>  effect.render(0, numTriangles);</listing>
+</em>
+<em>  <p>Note that the <code>VertexData</code> being uploaded has to be created with the same
+</em>  format as the one returned by the effect's <code>vertexFormat</code> property.</p>
+<em>
+</em>  <p><strong>Extending the Effect class</strong></p>
+<em>
+</em>  <p>The base <code>Effect</code>-class can only render white triangles, which is not much
+<em>  use in itself. However, it is designed to be extended; subclasses can easily implement any
+</em>  kinds of shaders.</p>
+<em>
+</em>  <p>Normally, you won't extend this class directly, but either <code>FilterEffect</code>
+<em>  or <code>MeshEffect</code>, depending on your needs (i.e. if you want to create a new
+</em>  fragment filter or a new mesh style). Whichever base class you're extending, you should
+<em>  override the following methods:</p>
+</em>
+<em>  <ul>
+</em>    <li><code>createProgram():Program</code> — must create the actual program containing 
+<em>        vertex- and fragment-shaders. A program will be created only once for each render
+</em>        context; this is taken care of by the base class.</li>
+<em>    <li><code>get programVariantName():UInt</code> (optional) — override this if your
+</em>        effect requires different programs, depending on its settings. The recommended
+<em>        way to do this is via a bit-mask that uniquely encodes the current settings.</li>
+</em>    <li><code>get vertexFormat():String</code> (optional) — must return the
+<em>        <code>VertexData</code> format that this effect requires for its vertices. If
+</em>        the effect does not require any special attributes, you can leave this out.</li>
+<em>    <li><code>beforeDraw(context:Context3D):Void</code> — Set up your context by
+</em>        configuring program constants and buffer attributes.</li>
+<em>    <li><code>afterDraw(context:Context3D):Void</code> — Will be called directly after
+</em>        <code>context.drawTriangles()</code>. Clean up any context configuration here.</li>
+<em>  </ul>
+</em>
+<em>  <p>Furthermore, you need to add properties that manage the data you require on rendering,
+</em>  e.g. the texture(s) that should be used, program constants, etc. I recommend looking at
+<em>  the implementations of Starling's <code>FilterEffect</code> and <code>MeshEffect</code>
+</em>  classes to see how to approach sub-classing.</p>
+<em>
+</em>  @see FilterEffect
+<em>  @see MeshEffect
+</em>  @see starling.styles.MeshStyle
+<em>  @see starling.filters.FragmentFilter
+</em>  @see starling.utils.RenderUtil</p></div><h3 class="section">Static variables</h3><div class="fields"><div class="field "><a name="VERTEX_FORMAT"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value(VertexDataFormat.fromString(&quot;position:float2&quot;))</span><span class="label label-static">static</span><a href="#VERTEX_FORMAT"><span class="identifier">VERTEX_FORMAT</span></a>:<a class="type" title="starling.rendering.VertexDataFormat - Describes the memory layout of VertexData instances, as used for every single vertex." href="../../starling/rendering/VertexDataFormat.html">VertexDataFormat</a><span> = VertexDataFormat.fromString(&quot;position:float2&quot;)</span></code></h3><div class="doc"><p>The vertex format expected by <code>uploadVertexData</code>:</p>
+<pre><code> *  &lt;code&gt;"position:float2"&lt;/code&gt;
+</code></pre></div></div></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><a href="#new"><span class="identifier">new</span></a>()</code></h3><div class="doc"><p>Creates a new effect.</p></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="mvpMatrix3D"></a><h3 class="anchor"><code><a href="#mvpMatrix3D"><span class="identifier">mvpMatrix3D</span></a>:<span class="type">Matrix3D</span></code></h3><div class="doc"><p>The MVP (modelview-projection) matrix transforms vertices into clipspace.</p></div></div><div class="field "><a name="programBaseName"></a><h3 class="anchor"><code><a href="#programBaseName"><span class="identifier">programBaseName</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>Returns the base name for the program.</p>
+<pre><code> *  @default the fully qualified class name
+</code></pre></div></div><div class="field "><a name="programName"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#programName"><span class="identifier">programName</span></a>:<span class="type">String</span></code></h3><div class="doc"><p>Returns the full name of the program, which is used to register it at the current</p>
+<pre><code> *  &lt;code&gt;Painter&lt;/code&gt;.
+ *
+ *  &lt;p&gt;The default implementation efficiently combines the program's base and variant
+ *  names (e.g. &lt;code&gt;LightEffect#42&lt;/code&gt;). It shouldn't be necessary to override
+ *  this method.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="programVariantName"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#programVariantName"><span class="identifier">programVariantName</span></a>:<span class="type">UInt</span></code></h3><div class="doc"><p>Override this method if the effect requires a different program depending on the</p>
+<pre><code> *  current settings. Ideally, you do this by creating a bit mask encoding all the options.
+ *  This method is called often, so do not allocate any temporary objects when overriding.
+ *
+ *  @default 0
+</code></pre></div></div><div class="field "><a name="vertexFormat"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#vertexFormat"><span class="identifier">vertexFormat</span></a>:<a class="type" title="starling.rendering.VertexDataFormat - Describes the memory layout of VertexData instances, as used for every single vertex." href="../../starling/rendering/VertexDataFormat.html">VertexDataFormat</a></code></h3><div class="doc"><p>The data format that this effect requires from the VertexData that it renders:</p>
+<pre><code> *  &lt;code&gt;"position:float2"&lt;/code&gt;
+</code></pre></div></div><div class="field "><a name="onRestore"></a><h3 class="anchor"><code><a href="#onRestore"><span class="identifier">onRestore</span></a>:<a class="type" title="starling.rendering.Effect - An effect encapsulates all steps of a Stage3D draw operation." href="../../starling/rendering/Effect.html">Effect</a>&nbsp;&#8209;&gt;&nbsp;<span class="type">Void</span></code></h3><div class="doc"><p>The function that you provide here will be called after a context loss.</p>
+<pre><code> *  Call both "upload..." methods from within the callback to restore any vertex or
+ *  index buffers. The callback will be executed with the effect as its sole parameter.
+</code></pre></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="dispose"></a><h3 class="anchor"><code><a href="#dispose"><span class="identifier">dispose</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Purges the index- and vertex-buffers.</p></div></div><div class="field "><a name="purgeBuffers"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ indexBuffer : true, vertexBuffer : true })</span><a href="#purgeBuffers"><span class="identifier">purgeBuffers</span></a>(<span style="white-space:nowrap">vertexBuffer:<span class="type">Bool</span> = true,</span> <span style="white-space:nowrap">indexBuffer:<span class="type">Bool</span> = true</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Purges one or both of the vertex- and index-buffers.</p></div></div><div class="field "><a name="render"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ numTriangles : -1, firstIndex : 0 })</span><a href="#render"><span class="identifier">render</span></a>(<span style="white-space:nowrap">firstIndex:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">numTriangles:<span class="type">Int</span> = -1</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Draws the triangles described by the index- and vertex-buffers, or a range of them.</p>
+<pre><code> *  This calls &lt;code&gt;beforeDraw&lt;/code&gt;, &lt;code&gt;context.drawTriangles&lt;/code&gt;, and
+ *  &lt;code&gt;afterDraw&lt;/code&gt;, in this order.
+</code></pre></div></div><div class="field "><a name="uploadIndexData"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ bufferUsage : &quot;staticDraw&quot; })</span><a href="#uploadIndexData"><span class="identifier">uploadIndexData</span></a>(<span style="white-space:nowrap">indexData:<a class="type" title="starling.rendering.IndexData - The IndexData class manages a raw list of vertex indices, allowing direct upload   to Stage3D index buffers." href="../../starling/rendering/IndexData.html">IndexData</a>,</span> <span style="white-space:nowrap">bufferUsage:<span class="type">String</span> = &quot;staticDraw&quot;</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Uploads the given index data to the internal index buffer. If the buffer is too</p>
+<pre><code> *  small, a new one is created automatically.
+ *
+ *  @param indexData   The IndexData instance to upload.
+ *  @param bufferUsage The expected buffer usage. Use one of the constants defined in
+ *                     &lt;code&gt;Context3DBufferUsage&lt;/code&gt;. Only used when the method call
+ *                     causes the creation of a new index buffer.
+</code></pre></div></div><div class="field "><a name="uploadVertexData"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ bufferUsage : &quot;staticDraw&quot; })</span><a href="#uploadVertexData"><span class="identifier">uploadVertexData</span></a>(<span style="white-space:nowrap">vertexData:<a class="type" title="starling.rendering.VertexData - The VertexData class manages a raw list of vertex information, allowing direct upload   to Stage3D vertex buffers." href="../../starling/rendering/VertexData.html">VertexData</a>,</span> <span style="white-space:nowrap">bufferUsage:<span class="type">String</span> = &quot;staticDraw&quot;</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Uploads the given vertex data to the internal vertex buffer. If the buffer is too</p>
+<pre><code> *  small, a new one is created automatically.
+ *
+ *  @param vertexData  The VertexData instance to upload.
+ *  @param bufferUsage The expected buffer usage. Use one of the constants defined in
+ *                     &lt;code&gt;Context3DBufferUsage&lt;/code&gt;. Only used when the method call
+ *                     causes the creation of a new vertex buffer.
+</code></pre></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.rendering - Starling API Reference</title></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><h1>starling.rendering </h1>  <table class="table table-condensed"><tbody><tr><th style="width:200px;"><i class="fa fa-folder-o"></i><a href="../../index.html" title="starling">..</a></th><td></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/BatchPool.html" title="starling.rendering.BatchPool">BatchPool</a></td><td><p></p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/BatchProcessor.html" title="starling.rendering.BatchProcessor">BatchProcessor</a></td><td><p>This class manages a list of mesh batches of different types;
+*  it acts as a "meta" MeshBatch that initiates all rendering.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/BatchToken.html" title="starling.rendering.BatchToken">BatchToken</a></td><td><p>Points to a location within a list of MeshBatches.
+<em>
+</em>  <p>Starling uses these tokens in its render cache. Each call to
+<em>  <code>painter.pushState()</code> or <code>painter.popState()</code> provides a token
+</em>  referencing the current location within the cache. In the next frame, if the relevant
+<em>  part of the display tree has not changed, these tokens can be used to render directly
+</em>  from the cache instead of constructing new MeshBatches.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/Effect.html" title="starling.rendering.Effect">Effect</a></td><td><p>An effect encapsulates all steps of a Stage3D draw operation. It configures the
+<em>  render context and sets up shader programs as well as index- and vertex-buffers, thus
+</em>  providing the basic mechanisms of all low-level rendering.
+<em>
+</em>  <p><strong>Using the Effect class</strong></p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/FilterEffect.html" title="starling.rendering.FilterEffect">FilterEffect</a></td><td><p>An effect drawing a mesh of textured vertices.
+<em>  This is the standard effect that is the base for all fragment filters;
+</em>  if you want to create your own fragment filters, you will have to extend this class.
+<em>
+</em>  <p>For more information about the usage and creation of effects, please have a look at
+<em>  the documentation of the parent class, "Effect".</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/IndexData.html" title="starling.rendering.IndexData">IndexData</a></td><td><p>The IndexData class manages a raw list of vertex indices, allowing direct upload
+<em>  to Stage3D index buffers. <em>You only have to work with this class if you're writing
+</em>  your own rendering code (e.g. if you create custom display objects).</em>
+<em>
+</em>  <p>To render objects with Stage3D, you have to organize vertices and indices in so-called
+<em>  vertex- and index-buffers. Vertex buffers store the coordinates of the vertices that make
+</em>  up an object; index buffers reference those vertices to determine which vertices spawn
+<em>  up triangles. Those buffers reside in graphics memory and can be accessed very
+</em>  efficiently by the GPU.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/MeshEffect.html" title="starling.rendering.MeshEffect">MeshEffect</a></td><td><p>An effect drawing a mesh of textured, colored vertices.
+<em>  This is the standard effect that is the base for all mesh styles;
+</em>  if you want to create your own mesh styles, you will have to extend this class.
+<em>
+</em>  <p>For more information about the usage and creation of effects, please have a look at
+<em>  the documentation of the root class, "Effect".</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/Painter.html" title="starling.rendering.Painter">Painter</a></td><td><p>A class that orchestrates rendering of all Starling display objects.
+<em>
+</em>  <p>A Starling instance contains exactly one 'Painter' instance that should be used for all
+<em>  rendering purposes. Each frame, it is passed to the render methods of all rendered display
+</em>  objects. To access it outside a render method, call <code>Starling.painter</code>.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/Program.html" title="starling.rendering.Program">Program</a></td><td><p>A Program represents a pair of a fragment- and vertex-shader.
+<em>
+</em>  <p>This class is a convenient replacement for Stage3Ds "Program3D" class. Its main
+<em>  advantage is that it survives a context loss; furthermore, it makes it simple to
+</em>  create a program from AGAL source without having to deal with the assembler.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/RenderState.html" title="starling.rendering.RenderState">RenderState</a></td><td><p>The RenderState stores a combination of settings that are currently used for rendering.
+<em>  This includes modelview and transformation matrices as well as context3D related settings.
+</em>
+<em>  <p>Starling's Painter instance stores a reference to the current RenderState.
+</em>  Via a stack mechanism, you can always save a specific state and restore it later.
+<em>  That makes it easy to write rendering code that doesn't have any side effects.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/VertexData.html" title="starling.rendering.VertexData">VertexData</a></td><td><p>The VertexData class manages a raw list of vertex information, allowing direct upload
+<em>  to Stage3D vertex buffers. <em>You only have to work with this class if you're writing
+</em>  your own rendering code (e.g. if you create custom display objects).</em>
+<em>
+</em>  <p>To render objects with Stage3D, you have to organize vertices and indices in so-called
+<em>  vertex- and index-buffers. Vertex buffers store the coordinates of the vertices that make
+</em>  up an object; index buffers reference those vertices to determine which vertices spawn
+<em>  up triangles. Those buffers reside in graphics memory and can be accessed very
+</em>  efficiently by the GPU.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/VertexDataAttribute.html" title="starling.rendering.VertexDataAttribute">VertexDataAttribute</a></td><td><p>Holds the properties of a single attribute in a VertexDataFormat instance.
+<em>  The member variables must never be changed; they are only <code>public</code>
+</em>  for performance reasons.</p></td></tr><tr class="class"><td style="width:200px;"><a href="../../starling/rendering/VertexDataFormat.html" title="starling.rendering.VertexDataFormat">VertexDataFormat</a></td><td><p>Describes the memory layout of VertexData instances, as used for every single vertex.
+<em>
+</em>  <p>The format is set up via a simple String. Here is an example:</p></td></tr></tbody></table></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>

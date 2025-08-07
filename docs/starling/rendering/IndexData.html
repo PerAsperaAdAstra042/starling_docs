@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en"><!-- use theme color or fallback -->
+<!--use textcolor from settings, otherwise create a contrasting color to theme color-->
+<head><meta charset="utf-8"/><link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet"/><link href="../../bootstrap/css/bootstrap-select.min.css" rel="stylesheet"/><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,700italic,400italic" rel="stylesheet" type="text/css"/><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,600,600italic,400" rel="stylesheet" type="text/css"/><link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.css" rel="stylesheet" type="text/css"/><script src="../../jquery-1.9.1.min.js"></script><script src="../../bootstrap/js/bootstrap.min.js"></script><script src="../../bootstrap/js/bootstrap-select.min.js"></script><link href="../../styles.css" rel="stylesheet"/><link href="../../extra-styles.css" rel="stylesheet"/><link href="../../haxe-nav.css" rel="stylesheet"/><link href="../../dark-mode.css" rel="stylesheet"/><script>var dox = {rootPath: "../../",platforms: ["Android","Flash","HTML5","Linux","Neko","Windows","iOS","macOS"]};</script><script src="../../nav.js"></script><script src="../../index.js"></script><link rel="icon" href="../../favicon.ico" type="image/x-icon"/><title>starling.rendering.IndexData - Starling API Reference</title><meta name="description" content="The IndexData class manages a raw list of vertex indices, allowing direct upload
+&lt;em&gt;  to Stage3D index buffers. &lt;em&gt;You only have to work with this class if you&#039;re writing
+&lt;/em&gt;  your own rendering code (e.g. if you create custom display objects).&lt;/em&gt;
+&lt;em&gt;
+&lt;/em&gt;  &lt;p&gt;To render objects with Stage3D, you have to organize vertices and indices in so-called
+&lt;em&gt;  vertex- and index-buffers. Vertex buffers store the coordinates of the vertices that make
+&lt;/em&gt;  up an object; index buffers reference those vertices to determine which vertices spawn
+&lt;em&gt;  up triangles. Those buffers reside in graphics memory and can be accessed very
+&lt;/em&gt;  efficiently by the GPU."/></head><body><script>/* Here to prevent flash of unstyled content */let systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;if ((!localStorage.theme && systemDarkMode) || localStorage.theme == "dark") {document.body.style.backgroundColor = "#111";document.body.style.opacity = "0";document.addEventListener("DOMContentLoaded", function(event) {toggleTheme();document.body.style.backgroundColor = "";document.body.style.opacity = "";});}</script><style>
+.navbar .brand {
+	display: inline-block;
+	float: none;
+	text-shadow: 0 0 0 transparent;
+}
+</style><nav class="nav"><div class="navbar"><div class="navbar-inner" style="background:#FAFAFA; border-bottom:1px solid rgba(0,0,0,.09)"><div class="container"><a class="brand" style="color:#000000" href="../../">Starling API Reference</a><a href="#" id="theme-toggle" class="brand" style="color:#000000" onclick="toggleTheme()" title="Toggle Dark Mode"><i class="fa fa-moon-o"></i></a></div></div></div></nav><div class="container main-content"><div class="row-fluid"><div class="span3"><div class="well sidebar-nav"><form class="form-search" id="searchForm"><div class="input-prepend input-block-level"><span class="add-on"><i class="fa fa-search"></i></span><input id="search" type="text" placeholder="Filter (Ctrl+P)" autocomplete="off"/></div></form><div class="dropdown"><select id="select-platform" class="selectpicker" title="Filter by platform" data-width="100%"><option value="all" selected="selected">All Platforms</option><option>Android</option><option>Flash</option><option>HTML5</option><option>Linux</option><option>Neko</option><option>Windows</option><option>iOS</option><option>macOS</option></select></div></div><div class="well sidebar-nav" id="explorer"><div id="nav"></div></div></div><div class="span9"><div class="page-header"><span class="viewsource"><a href="https://github.com/openfl/starling/tree/master/src/starling/rendering/IndexData.hx" class="btn btn-medium"><i class="fa fa-eye"></i> View source</a></span><h1><small>class</small> IndexData</h1><h4><small>package <a href="../../starling/rendering/index.html">starling.rendering</a></small></h4>    <span class="label label-meta label-meta-directlyUsed" title="Marks types that are directly referenced by non-extern code.">@:directlyUsed</span><hr/><p class="availability"><em>Available on  all platforms</em></p></div><div class="body"><div class="doc doc-main"><p>The IndexData class manages a raw list of vertex indices, allowing direct upload
+<em>  to Stage3D index buffers. <em>You only have to work with this class if you're writing
+</em>  your own rendering code (e.g. if you create custom display objects).</em>
+<em>
+</em>  <p>To render objects with Stage3D, you have to organize vertices and indices in so-called
+<em>  vertex- and index-buffers. Vertex buffers store the coordinates of the vertices that make
+</em>  up an object; index buffers reference those vertices to determine which vertices spawn
+<em>  up triangles. Those buffers reside in graphics memory and can be accessed very
+</em>  efficiently by the GPU.</p>
+<em>
+</em>  <p>Before you can move data into the buffers, you have to set it up in conventional
+<em>  memory — that is, in a Vector or a ByteArray. Since it's quite cumbersome to manually
+</em>  create and manipulate those data structures, the IndexData and VertexData classes provide
+<em>  a simple way to do just that. The data is stored in a ByteArray (one index or vertex after
+</em>  the other) that can easily be uploaded to a buffer.</p>
+<em>
+</em>  <strong>Basic Quad Layout</strong>
+<em>
+</em>  <p>In many cases, the indices we are working with will reference just quads, i.e.
+<em>  triangles composing rectangles. That means that many IndexData instances will contain
+</em>  similar or identical data — a great opportunity for optimization!</p>
+<em>
+</em>  <p>If an IndexData instance follows a specific layout, it will be recognized
+<em>  automatically and many operations can be executed much faster. In Starling, that
+</em>  layout is called "basic quad layout". In order to recognize this specific sequence,
+<em>  the indices of each quad have to use the following order:</p>
+</em>
+<em>  <pre>n, n+1, n+2, n+1, n+3, n+2</pre>
+</em>
+<em>  <p>The subsequent quad has to use <code>n+4</code> as starting value, the next one
+</em>  <code>n+8</code>, etc. Here is an example with 3 quads / 6 triangles:</p>
+<em>
+</em>  <pre>0, 1, 2, 1, 3, 2,   4, 5, 6, 5, 7, 6,   8, 9, 10, 9, 11, 10</pre>
+<em>
+</em>  <p>If you are describing quad-like meshes, make sure to always use this layout.</p>
+<em>
+</em>  @see VertexData</p></div><h3 class="section">Constructor</h3><div class="fields"><div class="field "><a name="new"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ initialCapacity : 48 })</span><a href="#new"><span class="identifier">new</span></a>(<span style="white-space:nowrap">initialCapacity:<span class="type">Int</span> = 48</span>)</code></h3><div class="doc"><p>Creates an empty IndexData instance with the given capacity (in indices).</p>
+<pre><code> *
+ *  @param initialCapacity
+ *
+ *  The initial capacity affects just the way the internal ByteArray is allocated, not the
+ *  &lt;code&gt;numIndices&lt;/code&gt; value, which will always be zero when the constructor returns.
+ *  The reason for this behavior is the peculiar way in which ByteArrays organize their
+ *  memory:
+ *
+ *  &lt;p&gt;The first time you set the length of a ByteArray, it will adhere to that:
+ *  a ByteArray with length 20 will take up 20 bytes (plus some overhead). When you change
+ *  it to a smaller length, it will stick to the original value, e.g. with a length of 10
+ *  it will still take up 20 bytes. However, now comes the weird part: change it to
+ *  anything above the original length, and it will allocate 4096 bytes!&lt;/p&gt;
+ *
+ *  &lt;p&gt;Thus, be sure to always make a generous educated guess, depending on the planned
+ *  usage of your IndexData instances.&lt;/p&gt;
+</code></pre></div></div></div><h3 class="section">Variables</h3><div class="fields"><div class="field "><a name="indexSizeInBytes"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#indexSizeInBytes"><span class="identifier">indexSizeInBytes</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>The number of bytes required for each index value.</p></div></div><div class="field "><a name="numIndices"></a><h3 class="anchor"><code><a href="#numIndices"><span class="identifier">numIndices</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>The total number of indices.</p>
+<pre><code> *
+ *  &lt;p&gt;If this instance contains only standardized, basic quad indices, resizing
+ *  will automatically fill up with appropriate quad indices. Otherwise, it will fill
+ *  up with zeroes.&lt;/p&gt;
+ *
+ *  &lt;p&gt;If you set the number of indices to zero, quad layout will be restored.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="numQuads"></a><h3 class="anchor"><code><a href="#numQuads"><span class="identifier">numQuads</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>The number of quads that can be spawned up with the contained indices.</p>
+<pre><code> *  (In other words: the number of triangles divided by two.)
+</code></pre></div></div><div class="field "><a name="numTriangles"></a><h3 class="anchor"><code><a href="#numTriangles"><span class="identifier">numTriangles</span></a>:<span class="type">Int</span></code></h3><div class="doc"><p>The number of triangles that can be spawned up with the contained indices.</p>
+<pre><code> *  (In other words: the number of indices divided by three.)
+</code></pre></div></div><div class="field "><a name="rawData"></a><h3 class="anchor"><code><span class="label">read only</span><a href="#rawData"><span class="identifier">rawData</span></a>:<span class="type">ByteArray</span></code></h3><div class="doc"><p>The raw index data; not a copy! Beware: the referenced ByteArray may change any time.</p>
+<pre><code> *  Never store a reference to it, and never modify its contents manually.
+</code></pre></div></div><div class="field "><a name="useQuadLayout"></a><h3 class="anchor"><code><a href="#useQuadLayout"><span class="identifier">useQuadLayout</span></a>:<span class="type">Bool</span></code></h3><div class="doc"><p>Indicates if all indices are following the basic quad layout.</p>
+<pre><code> *
+ *  &lt;p&gt;This property is automatically updated if an index is set to a value that violates
+ *  basic quad layout. Once the layout was violated, the instance will always stay that
+ *  way, even if you fix that violating value later. Only calling &lt;code&gt;clear&lt;/code&gt; or
+ *  manually enabling the property will restore quad layout.&lt;/p&gt;
+ *
+ *  &lt;p&gt;If you enable this property on an instance, all indices will immediately be
+ *  replaced with indices following standard quad layout.&lt;/p&gt;
+ *
+ *  &lt;p&gt;Please look at the class documentation for more information about that kind
+ *  of layout, and why it is important.&lt;/p&gt;
+ *
+ *  @default true
+</code></pre></div></div></div><h3 class="section">Methods</h3><div class="fields"><div class="field "><a name="addQuad"></a><h3 class="anchor"><code><a href="#addQuad"><span class="identifier">addQuad</span></a>(<span style="white-space:nowrap">a:<span class="type">UInt</span>,</span> <span style="white-space:nowrap">b:<span class="type">UInt</span>,</span> <span style="white-space:nowrap">c:<span class="type">UInt</span>,</span> <span style="white-space:nowrap">d:<span class="type">UInt</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Appends two triangles spawning up the quad with the given indices.</p>
+<pre><code> *  The indices of the vertices are arranged like this:
+ *
+ *  &lt;pre&gt;
+ *  a - b
+ *  | / |
+ *  c - d
+ *  &lt;/pre&gt;
+ *
+ *  &lt;p&gt;To make sure the indices will follow the basic quad layout, make sure each
+ *  parameter increments the one before it (e.g. &lt;code&gt;0, 1, 2, 3&lt;/code&gt;).&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="addTriangle"></a><h3 class="anchor"><code><a href="#addTriangle"><span class="identifier">addTriangle</span></a>(<span style="white-space:nowrap">a:<span class="type">UInt</span>,</span> <span style="white-space:nowrap">b:<span class="type">UInt</span>,</span> <span style="white-space:nowrap">c:<span class="type">UInt</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Appends three indices representing a triangle. Reference the vertices clockwise,</p>
+<pre><code> *  as this defines the front side of the triangle.
+</code></pre></div></div><div class="field "><a name="clear"></a><h3 class="anchor"><code><a href="#clear"><span class="identifier">clear</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Explicitly frees up the memory used by the ByteArray, thus removing all indices.</p>
+<pre><code> *  Quad layout will be restored (until adding data violating that layout).
+</code></pre></div></div><div class="field "><a name="clone"></a><h3 class="anchor"><code><a href="#clone"><span class="identifier">clone</span></a>():<a class="type" title="starling.rendering.IndexData - The IndexData class manages a raw list of vertex indices, allowing direct upload   to Stage3D index buffers." href="../../starling/rendering/IndexData.html">IndexData</a></code></h3><div class="doc"><p>Creates a duplicate of the IndexData object.</p></div></div><div class="field "><a name="copyTo"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ numIndices : -1, indexID : 0, offset : 0, targetIndexID : 0 })</span><a href="#copyTo"><span class="identifier">copyTo</span></a>(<span style="white-space:nowrap">target:<a class="type" title="starling.rendering.IndexData - The IndexData class manages a raw list of vertex indices, allowing direct upload   to Stage3D index buffers." href="../../starling/rendering/IndexData.html">IndexData</a>,</span> <span style="white-space:nowrap">targetIndexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">offset:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">indexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">numIndices:<span class="type">Int</span> = -1</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Copies the index data (or a range of it, defined by 'indexID' and 'numIndices')</p>
+<pre><code> *  of this instance to another IndexData object, starting at a certain target index.
+ *  If the target is not big enough, it will grow to fit all the new indices.
+ *
+ *  &lt;p&gt;By passing a non-zero &lt;code&gt;offset&lt;/code&gt;, you can raise all copied indices
+ *  by that value in the target object.&lt;/p&gt;
+</code></pre></div></div><div class="field "><a name="createIndexBuffer"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ bufferUsage : &quot;staticDraw&quot;, upload : false })</span><a href="#createIndexBuffer"><span class="identifier">createIndexBuffer</span></a>(<span style="white-space:nowrap">upload:<span class="type">Bool</span> = false,</span> <span style="white-space:nowrap">bufferUsage:<span class="type">String</span> = &quot;staticDraw&quot;</span>):<span class="type">IndexBuffer3D</span></code></h3><div class="doc"><p>Creates an index buffer object with the right size to fit the complete data.</p>
+<pre><code> *  Optionally, the current data is uploaded right away.
+</code></pre></div></div><div class="field "><a name="getIndex"></a><h3 class="anchor"><code><a href="#getIndex"><span class="identifier">getIndex</span></a>(<span style="white-space:nowrap">indexID:<span class="type">Int</span></span>):<span class="type">Int</span></code></h3><div class="doc"><p>Reads the index from the specified position.</p></div></div><div class="field "><a name="offsetIndices"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ numIndices : -1, indexID : 0 })</span><a href="#offsetIndices"><span class="identifier">offsetIndices</span></a>(<span style="white-space:nowrap">offset:<span class="type">Int</span>,</span> <span style="white-space:nowrap">indexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">numIndices:<span class="type">Int</span> = -1</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Adds an offset to all indices in the specified range.</p></div></div><div class="field "><a name="setIndex"></a><h3 class="anchor"><code><a href="#setIndex"><span class="identifier">setIndex</span></a>(<span style="white-space:nowrap">indexID:<span class="type">Int</span>,</span> <span style="white-space:nowrap">index:<span class="type">UInt</span></span>):<span class="type">Void</span></code></h3><div class="doc"><p>Sets an index at the specified position.</p></div></div><div class="field "><a name="toString"></a><h3 class="anchor"><code><a href="#toString"><span class="identifier">toString</span></a>():<span class="type">String</span></code></h3><div class="doc"><p>Returns a string representation of the IndexData object,</p>
+<pre><code> *  including a comma-separated list of all indices.
+</code></pre></div></div><div class="field "><a name="toVector"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ out : null })</span><a href="#toVector"><span class="identifier">toVector</span></a>(<span style="white-space:nowrap">?out:<span class="type">Vector</span>&lt;<span class="type">UInt</span>&gt;</span>):<span class="type">Vector</span>&lt;<span class="type">UInt</span>&gt;</code></h3><div class="doc"><p>Creates a vector containing all indices. If you pass an existing vector to the method,</p>
+<pre><code> *  its contents will be overwritten.
+</code></pre></div></div><div class="field "><a name="trim"></a><h3 class="anchor"><code><a href="#trim"><span class="identifier">trim</span></a>():<span class="type">Void</span></code></h3><div class="doc"><p>Optimizes the ByteArray so that it has exactly the required capacity, without</p>
+<pre><code> *  wasting any memory. If your IndexData object grows larger than the initial capacity
+ *  you passed to the constructor, call this method to avoid the 4k memory problem.
+</code></pre></div></div><div class="field "><a name="uploadToIndexBuffer"></a><h3 class="anchor"><code><span class="label label-meta label-meta-value" title="Used to store default values for fields and function arguments.">@:value({ numIndices : -1, indexID : 0 })</span><a href="#uploadToIndexBuffer"><span class="identifier">uploadToIndexBuffer</span></a>(<span style="white-space:nowrap">buffer:<span class="type">IndexBuffer3D</span>,</span> <span style="white-space:nowrap">indexID:<span class="type">Int</span> = 0,</span> <span style="white-space:nowrap">numIndices:<span class="type">Int</span> = -1</span>):<span class="type">Void</span></code></h3><div class="doc"><p>Uploads the complete data (or a section of it) to the given index buffer.</p></div></div></div></div></div></div></div><footer class="section site-footer" style="background:#FAFAFA"><div class="container"><div class="copyright"><p style="color:#000000">This documentation is generated for version 2.7</p><p style="color:#000000">&copy; 2025 &nbsp;<a style="color:#000000" href="http://www.openfl.org">http://www.openfl.org</a></p></div></div></footer><script src="../..//highlighter.js"></script><link href="../../highlighter.css" rel="stylesheet"/></body></html>
