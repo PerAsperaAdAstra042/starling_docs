@@ -34,7 +34,7 @@ jobs:
         haxelib install dox --quiet
     - name: Build project
       run: |
-        git clone "https://github.com/openfl/starling/"
+        git clone --depth 1 "https://github.com/openfl/starling/"
         cd starling/scripts
         haxe docs.hxml
         cp -r ../docs/ ../../docs
