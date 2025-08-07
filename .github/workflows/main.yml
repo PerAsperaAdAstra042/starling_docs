@@ -47,10 +47,3 @@ jobs:
         git add docs
         git commit -m "Compiled files [skip ci]"
         git push
-
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/master'
-      with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/
